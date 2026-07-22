@@ -12,12 +12,16 @@ enum Role {
   CONTRIBUTOR
   MODERATOR
   ADMIN
+
+  @@map("role")
 }
 
 enum SubscriptionTier {
   FREE
   EXPLORER_PLUS
   SCHOOL
+
+  @@map("subscription_tier")
 }
 
 enum ToyStatus {
@@ -25,91 +29,105 @@ enum ToyStatus {
   PUBLISHED
   FLAGGED
   REJECTED
+
+  @@map("toy_status")
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  name          String?
-  country       String?
-  role          Role      @default(MEMBER)
-  createdAt     DateTime  @default(now())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String   @unique
+  name      String?
+  country   String?
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now()) @map("created_at")
 
-  subscription  Subscription?
-  submissions   Toy[]     @relation("SubmittedBy")
-  collections   Collection[]
+  subscription Subscription?
+  submissions  Toy[]        @relation("SubmittedBy")
+  collections  Collection[]
+
+  @@map("users")
 }
 
 model Subscription {
-  id          String            @id @default(cuid())
-  user        User              @relation(fields: [userId], references: [id])
-  userId      String            @unique
-  tier        SubscriptionTier  @default(FREE)
-  stripeCustomerId String?
-  status      String            @default("active")
-  renewsAt    DateTime?
-  createdAt   DateTime          @default(now())
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user             User             @relation(fields: [userId], references: [id])
+  userId           String           @unique @map("user_id") @db.Uuid
+  tier             SubscriptionTier @default(FREE)
+  stripeCustomerId String?          @map("stripe_customer_id")
+  status           String           @default("active")
+  renewsAt         DateTime?        @map("renews_at")
+  createdAt        DateTime         @default(now()) @map("created_at")
+
+  @@map("subscriptions")
 }
 
 model Toy {
-  id            String     @id @default(cuid())
-  name          String
-  country       String
-  region        String
-  materials     String
-  playDescription String   @db.Text
-  history       String     @db.Text
-  status        ToyStatus  @default(PENDING)
-  submittedBy   User?      @relation("SubmittedBy", fields: [submittedById], references: [id])
-  submittedById String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  country         String
+  region          String
+  materials       String
+  playDescription String     @map("play_description")
+  history         String?
+  status          ToyStatus  @default(PENDING)
+  submittedBy     User?      @relation("SubmittedBy", fields: [submittedById], references: [id])
+  submittedById   String?    @map("submitted_by") @db.Uuid
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @default(now()) @map("updated_at")
 
-  media         Media[]
-  translations  Translation[]
-  collector     CollectorLink?
-  collections   Collection[]
+  media        Media[]
+  translations Translation[]
+  collector    CollectorLink?
+  collections  Collection[]
+
+  @@map("toys")
 }
 
 model Media {
-  id       String  @id @default(cuid())
-  toy      Toy     @relation(fields: [toyId], references: [id])
-  toyId    String
-  url      String
-  alt      String?
-  isPrimary Boolean @default(false)
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  toy       Toy     @relation(fields: [toyId], references: [id])
+  toyId     String  @map("toy_id") @db.Uuid
+  url       String
+  alt       String?
+  isPrimary Boolean @default(false) @map("is_primary")
+
+  @@map("media")
 }
 
 model Translation {
-  id       String  @id @default(cuid())
-  toy      Toy     @relation(fields: [toyId], references: [id])
-  toyId    String
-  locale   String
-  name     String?
-  playDescription String? @db.Text
-  history  String? @db.Text
+  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  toy             Toy     @relation(fields: [toyId], references: [id])
+  toyId           String  @map("toy_id") @db.Uuid
+  locale          String
+  name            String?
+  playDescription String? @map("play_description")
+  history         String?
 
   @@unique([toyId, locale])
+  @@map("translations")
 }
 
 model CollectorLink {
-  id          String  @id @default(cuid())
-  toy         Toy     @relation(fields: [toyId], references: [id])
-  toyId       String  @unique
-  collectorName String
-  collectorRegion String
-  description String
-  destinationUrl String
-  trackingCode   String @unique
-  verified    Boolean @default(false)
+  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  toy             Toy     @relation(fields: [toyId], references: [id])
+  toyId           String  @unique @map("toy_id") @db.Uuid
+  collectorName   String  @map("collector_name")
+  collectorRegion String  @map("collector_region")
+  description     String
+  destinationUrl  String  @map("destination_url")
+  trackingCode    String  @unique @map("tracking_code")
+  verified        Boolean @default(false)
+
+  @@map("collector_links")
 }
 
 model Collection {
-  id     String @id @default(cuid())
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user   User   @relation(fields: [userId], references: [id])
-  userId String
+  userId String @map("user_id") @db.Uuid
   toy    Toy    @relation(fields: [toyId], references: [id])
-  toyId  String
+  toyId  String @map("toy_id") @db.Uuid
 
   @@unique([userId, toyId])
+  @@map("collections")
 }
