@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  MEMBER
+  CONTRIBUTOR
+  MODERATOR
+  ADMIN
+}
+
+enum SubscriptionTier {
+  FREE
+  EXPLORER_PLUS
+  SCHOOL
+}
+
+enum ToyStatus {
+  PENDING
+  PUBLISHED
+  FLAGGED
+  REJECTED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  country       String?
+  role          Role      @default(MEMBER)
+  createdAt     DateTime  @default(now())
+
+  subscription  Subscription?
+  submissions   Toy[]     @relation("SubmittedBy")
+  collections   Collection[]
+}
+
+model Subscription {
+  id          String            @id @default(cuid())
+  user        User              @relation(fields: [userId], references: [id])
+  userId      String            @unique
+  tier        SubscriptionTier  @default(FREE)
+  stripeCustomerId String?
+  status      String            @default("active")
+  renewsAt    DateTime?
+  createdAt   DateTime          @default(now())
+}
+
+model Toy {
+  id            String     @id @default(cuid())
+  name          String
+  country       String
+  region        String
+  materials     String
+  playDescription String   @db.Text
+  history       String     @db.Text
+  status        ToyStatus  @default(PENDING)
+  submittedBy   User?      @relation("SubmittedBy", fields: [submittedById], references: [id])
+  submittedById String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  media         Media[]
+  translations  Translation[]
+  collector     CollectorLink?
+  collections   Collection[]
+}
+
+model Media {
+  id       String  @id @default(cuid())
+  toy      Toy     @relation(fields: [toyId], references: [id])
+  toyId    String
+  url      String
+  alt      String?
+  isPrimary Boolean @default(false)
+}
+
+model Translation {
+  id       String  @id @default(cuid())
+  toy      Toy     @relation(fields: [toyId], references: [id])
+  toyId    String
+  locale   String
+  name     String?
+  playDescription String? @db.Text
+  history  String? @db.Text
+
+  @@unique([toyId, locale])
+}
+
+model CollectorLink {
+  id          String  @id @default(cuid())
+  toy         Toy     @relation(fields: [toyId], references: [id])
+  toyId       String  @unique
+  collectorName String
+  collectorRegion String
+  description String
+  destinationUrl String
+  trackingCode   String @unique
+  verified    Boolean @default(false)
+}
+
+model Collection {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  toy    Toy    @relation(fields: [toyId], references: [id])
+  toyId  String
+
+  @@unique([userId, toyId])
+}
