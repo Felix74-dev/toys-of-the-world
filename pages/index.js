@@ -147,4 +147,54 @@ export default function Home(props) {
       </div>
 
       <button
-        onClick={function () { setShowForm(true); }
+        onClick={function () { setShowForm(true); }}
+        style={{
+          position: 'fixed', bottom: 20, right: 20, background: '#E8604B', color: '#fff',
+          border: 'none', borderRadius: 999, padding: '14px 20px', fontWeight: 700, fontSize: 14,
+        }}
+      >
+        Share a toy
+      </button>
+
+      {showForm && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+          <div style={{ background: colors.paper, width: '100%', maxWidth: 480, borderRadius: '20px 20px 0 0', padding: 20, maxHeight: '85vh', overflowY: 'auto' }}>
+            <button onClick={function () { setShowForm(false); }} style={{ float: 'right', border: 'none', background: '#fff', borderRadius: 999, width: 32, height: 32 }}>x</button>
+            <h2 style={{ color: colors.ink }}>Share a toy</h2>
+            {submitMessage ? (
+              <p>{submitMessage}</p>
+            ) : (
+              <div>
+                <input placeholder="Toy name" value={formData.name}
+                  onChange={function (e) { setFormData(Object.assign({}, formData, { name: e.target.value })); }}
+                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
+                <input placeholder="Where is this toy played? (country/region)" value={formData.country}
+                  onChange={function (e) { setFormData(Object.assign({}, formData, { country: e.target.value })); }}
+                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
+                <input placeholder="Materials" value={formData.materials}
+                  onChange={function (e) { setFormData(Object.assign({}, formData, { materials: e.target.value })); }}
+                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
+                <textarea placeholder="Tell us what you know about the toy" value={formData.playDescription}
+                  onChange={function (e) { setFormData(Object.assign({}, formData, { playDescription: e.target.value })); }}
+                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd', minHeight: 70 }} />
+                <input placeholder="Source of information (e.g. story books, family, museums)" value={formData.source}
+                  onChange={function (e) { setFormData(Object.assign({}, formData, { source: e.target.value })); }}
+                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: colors.ink, marginBottom: 6 }}>Add a photo</label>
+                <input type="file" accept="image/*"
+                  onChange={function (e) { setPhotoFile(e.target.files[0]); }}
+                  style={{ width: '100%', marginBottom: 14, fontSize: 12 }} />
+                <p style={{ fontSize: 11.5, color: '#8a8267', margin: '0 0 12px' }}>
+                  Submissions are reviewed by our team before they're published, so it may take a little while to appear.
+                </p>
+                <button onClick={handleSubmit} disabled={uploading} style={{ width: '100%', background: '#E8604B', color: '#fff', border: 'none', padding: 13, borderRadius: 12, fontWeight: 700 }}>
+                  {uploading ? 'Submitting...' : 'Submit for approval'}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </main>
+  );
+}
