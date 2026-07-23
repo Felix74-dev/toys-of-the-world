@@ -96,11 +96,14 @@ export default function Admin() {
         {pending.map(function (toy) {
           return (
             <div key={toy.id} style={{ background: '#fff', borderRadius: 14, padding: 16, border: '1px solid #eee' }}>
+              {toy.media && toy.media[0] ? (
+                <img src={toy.media[0].url} alt={toy.name} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 10, marginBottom: 10 }} />
+              ) : null}
               <h3 style={{ margin: '0 0 4px', color: colors.ink }}>{toy.name}</h3>
               <p style={{ fontSize: 13, color: '#666', margin: '0 0 8px' }}>{toy.country} &middot; {toy.region}</p>
               <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>Materials:</strong> {toy.materials}</p>
               <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>Description:</strong> {toy.playDescription}</p>
-              {toy.history && <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>History:</strong> {toy.history}</p>}
+              {toy.history ? <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>History:</strong> {toy.history}</p> : null}
               <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
                 <button
                   onClick={function () { decide(toy.id, 'PUBLISHED'); }}
