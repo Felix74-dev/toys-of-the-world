@@ -9,6 +9,7 @@ export default async function handler(req, res) {
 
   const toys = await prisma.toy.findMany({
     where: { status: 'PENDING' },
+    include: { media: { where: { isPrimary: true }, take: 1 } },
     orderBy: { createdAt: 'asc' },
   });
 
