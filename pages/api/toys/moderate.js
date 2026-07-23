@@ -1,6 +1,12 @@
 import { prisma } from '../../../lib/prisma';
 
 export default async function handler(req, res) {
+  const password = req.headers['x-admin-password'];
+
+  if (!password || password !== process.env.ADMIN_PASSWORD) {
+    return res.status(401).json({ error: 'Not authorized' });
+  }
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
     return res.status(405).end();
