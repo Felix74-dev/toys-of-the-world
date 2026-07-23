@@ -59,8 +59,11 @@ export default function Home(props) {
           Upload it yourself! If you know of a toy that could be in this app, please get in touch with us.
           Every toy added helps us build the biggest toy library in the world.
         </p>
-        <p style={{ fontSize: 14, lineHeight: 1.55, margin: 0, fontWeight: 700, color: '#fff' }}>
+        <p style={{ fontSize: 14, lineHeight: 1.55, margin: '0 0 14px', fontWeight: 700, color: '#fff' }}>
           This app is for everyone passionate about toys: kids, young people, historians, parents, schools, and community organisations.
+        </p>
+        <p style={{ fontSize: 11.5, lineHeight: 1.5, margin: 0, color: 'rgba(255,255,255,0.75)', fontStyle: 'italic' }}>
+          Many toys were created independently by different cultures throughout history. We celebrate every documented tradition rather than assigning a single origin.
         </p>
       </header>
 
@@ -97,7 +100,7 @@ export default function Home(props) {
                 <img src={photo} alt={toy.name} style={{ width: 48, height: 48, borderRadius: 12, objectFit: 'cover' }} />
                 <h3 style={{ margin: 0, color: colors.ink, fontSize: 18 }}>{toy.name}</h3>
               </div>
-              <div style={{ fontSize: 12.5, color: '#E8604B', fontWeight: 600, marginBottom: 8 }}>{toy.country}</div>
+              <div style={{ fontSize: 12.5, color: '#E8604B', fontWeight: 600, marginBottom: 8 }}>Played in: {toy.country}</div>
               <p style={{ fontSize: 13.5, lineHeight: 1.5, margin: '0 0 10px' }}>{toy.playDescription}</p>
               <div style={{ fontSize: 11, background: '#f4f0e4', display: 'inline-block', padding: '4px 9px', borderRadius: 8 }}>
                 {toy.materials}
@@ -130,7 +133,7 @@ export default function Home(props) {
                 <input placeholder="Toy name" value={formData.name}
                   onChange={function (e) { setFormData(Object.assign({}, formData, { name: e.target.value })); }}
                   style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
-                <input placeholder="Country" value={formData.country}
+                <input placeholder="Where is this toy played? (country/region)" value={formData.country}
                   onChange={function (e) { setFormData(Object.assign({}, formData, { country: e.target.value })); }}
                   style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
                 <input placeholder="Materials" value={formData.materials}
