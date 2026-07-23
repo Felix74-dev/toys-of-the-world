@@ -148,8 +148,11 @@ export default function Home(props) {
                 <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: colors.ink, marginBottom: 6 }}>Add a photo</label>
                 <input type="file" accept="image/*"
                   style={{ width: '100%', marginBottom: 14, fontSize: 12 }} />
+                <p style={{ fontSize: 11.5, color: '#8a8267', margin: '0 0 12px' }}>
+                  Submissions are reviewed by our team before they're published, so it may take a little while to appear.
+                </p>
                 <button onClick={handleSubmit} style={{ width: '100%', background: '#E8604B', color: '#fff', border: 'none', padding: 13, borderRadius: 12, fontWeight: 700 }}>
-                  Add to the atlas
+                  Add to the library
                 </button>
               </div>
             )}
