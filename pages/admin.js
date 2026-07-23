@@ -10,24 +10,28 @@ const colors = {
 export default function Admin() {
   const [password, setPassword] = useState('');
   const [unlocked, setUnlocked] = useState(false);
-  const [toys, setToys] = useState([]);
+  const [pending, setPending] = useState([]);
+  const [published, setPublished] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
-  function loadPending(pw) {
+  function loadAll(pw) {
     setLoading(true);
     setErrorMsg('');
-    fetch('/api/toys/pending', {
-      headers: { 'x-admin-password': pw },
-    })
-      .then(function (r) {
-        if (r.status === 401) {
+
+    Promise.all([
+      fetch('/api/toys/pending', { headers: { 'x-admin-password': pw } }),
+      fetch('/api/toys/published', { headers: { 'x-admin-password': pw } }),
+    ])
+      .then(function (responses) {
+        if (responses[0].status === 401 || responses[1].status === 401) {
           throw new Error('Wrong password');
         }
-        return r.json();
+        return Promise.all([responses[0].json(), responses[1].json()]);
       })
-      .then(function (data) {
-        setToys(data);
+      .then(function (results) {
+        setPending(results[0]);
+        setPublished(results[1]);
         setUnlocked(true);
         setLoading(false);
       })
@@ -43,7 +47,21 @@ export default function Admin() {
       headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
       body: JSON.stringify({ toyId: toyId, decision: decision }),
     }).then(function () {
-      setToys(toys.filter(function (t) { return t.id !== toyId; }));
+      const approvedToy = pending.filter(function (t) { return t.id === toyId; })[0];
+      setPending(pending.filter(function (t) { return t.id !== toyId; }));
+      if (decision === 'PUBLISHED' && approvedToy) {
+        setPublished([approvedToy].concat(published));
+      }
+    });
+  }
+
+  function removeToy(toyId) {
+    fetch('/api/toys/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+      body: JSON.stringify({ toyId: toyId }),
+    }).then(function () {
+      setPublished(published.filter(function (t) { return t.id !== toyId; }));
     });
   }
 
@@ -60,7 +78,7 @@ export default function Admin() {
         />
         <br />
         <button
-          onClick={function () { loadPending(password); }}
+          onClick={function () { loadAll(password); }}
           style={{ background: colors.coral, color: '#fff', border: 'none', padding: '12px 20px', borderRadius: 10, fontWeight: 700 }}
         >
           {loading ? 'Checking...' : 'Unlock'}
@@ -72,10 +90,10 @@ export default function Admin() {
 
   return (
     <main style={{ fontFamily: 'sans-serif', background: colors.paper, minHeight: '100vh', padding: 24 }}>
-      <h1 style={{ color: colors.ink, fontSize: 22 }}>Pending submissions ({toys.length})</h1>
-      {toys.length === 0 && <p>Nothing waiting for review right now.</p>}
-      <div style={{ display: 'grid', gap: 16, marginTop: 16 }}>
-        {toys.map(function (toy) {
+      <h1 style={{ color: colors.ink, fontSize: 22 }}>Pending submissions ({pending.length})</h1>
+      {pending.length === 0 && <p>Nothing waiting for review right now.</p>}
+      <div style={{ display: 'grid', gap: 16, marginTop: 16, marginBottom: 36 }}>
+        {pending.map(function (toy) {
           return (
             <div key={toy.id} style={{ background: '#fff', borderRadius: 14, padding: 16, border: '1px solid #eee' }}>
               <h3 style={{ margin: '0 0 4px', color: colors.ink }}>{toy.name}</h3>
@@ -97,6 +115,28 @@ export default function Admin() {
                   Reject
                 </button>
               </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <h1 style={{ color: colors.ink, fontSize: 22 }}>Published toys ({published.length})</h1>
+      <div style={{ display: 'grid', gap: 16, marginTop: 16 }}>
+        {published.map(function (toy) {
+          return (
+            <div key={toy.id} style={{ background: '#fff', borderRadius: 14, padding: 16, border: '1px solid #eee' }}>
+              <h3 style={{ margin: '0 0 4px', color: colors.ink }}>{toy.name}</h3>
+              <p style={{ fontSize: 13, color: '#666', margin: '0 0 8px' }}>{toy.country}</p>
+              <button
+                onClick={function () {
+                  if (window.confirm('Remove this toy from the library? This cannot be undone.')) {
+                    removeToy(toy.id);
+                  }
+                }}
+                style={{ background: '#E8604B', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700, width: '100%' }}
+              >
+                Remove from library
+              </button>
             </div>
           );
         })}
