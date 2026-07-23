@@ -14,6 +14,9 @@ export default function Admin() {
   const [published, setPublished] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [expandedId, setExpandedId] = useState(null);
+  const [editData, setEditData] = useState({});
+  const [saveMsg, setSaveMsg] = useState('');
 
   function loadAll(pw) {
     setLoading(true);
@@ -38,6 +41,37 @@ export default function Admin() {
       .catch(function (err) {
         setErrorMsg('Wrong password, please try again.');
         setLoading(false);
+      });
+  }
+
+  function openReview(toy) {
+    setExpandedId(toy.id);
+    setSaveMsg('');
+    setEditData({
+      name: toy.name,
+      country: toy.country,
+      materials: toy.materials,
+      playDescription: toy.playDescription,
+      history: toy.history || '',
+      photoUrl: toy.media && toy.media[0] ? toy.media[0].url : '',
+    });
+  }
+
+  function saveEdits(toyId) {
+    fetch('/api/toys/update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+      body: JSON.stringify(Object.assign({ toyId: toyId }, editData)),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function () {
+        setPending(pending.map(function (t) {
+          if (t.id !== toyId) return t;
+          const updated = Object.assign({}, t, editData);
+          updated.media = editData.photoUrl ? [{ url: editData.photoUrl }] : t.media;
+          return updated;
+        }));
+        setSaveMsg('Saved!');
       });
   }
 
@@ -88,36 +122,88 @@ export default function Admin() {
     );
   }
 
+  const inputStyle = { width: '100%', padding: 10, marginBottom: 12, borderRadius: 10, border: '1px solid #ddd', fontSize: 14 };
+  const labelStyle = { fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 4 };
+
   return (
     <main style={{ fontFamily: 'sans-serif', background: colors.paper, minHeight: '100vh', padding: 24 }}>
       <h1 style={{ color: colors.ink, fontSize: 22 }}>Pending submissions ({pending.length})</h1>
       {pending.length === 0 && <p>Nothing waiting for review right now.</p>}
       <div style={{ display: 'grid', gap: 16, marginTop: 16, marginBottom: 36 }}>
         {pending.map(function (toy) {
+          const isOpen = expandedId === toy.id;
+          const photo = toy.media && toy.media[0] ? toy.media[0].url : null;
           return (
             <div key={toy.id} style={{ background: '#fff', borderRadius: 14, padding: 16, border: '1px solid #eee' }}>
-              {toy.media && toy.media[0] && (
-                <img src={toy.media[0].url} alt={toy.name} style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 10, marginBottom: 10 }} />
+              {!isOpen && (
+                <div onClick={function () { openReview(toy); }} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  {photo && <img src={photo} alt={toy.name} style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 10 }} />}
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ margin: '0 0 2px', color: colors.ink }}>{toy.name}</h3>
+                    <p style={{ fontSize: 12, color: '#666', margin: 0 }}>{toy.country}</p>
+                  </div>
+                  <span style={{ color: colors.ink, fontSize: 13, fontWeight: 700 }}>Review &rarr;</span>
+                </div>
               )}
-              <h3 style={{ margin: '0 0 4px', color: colors.ink }}>{toy.name}</h3>
-              <p style={{ fontSize: 13, color: '#666', margin: '0 0 8px' }}>{toy.country} &middot; {toy.region}</p>
-              <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>Materials:</strong> {toy.materials}</p>
-              <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>Description:</strong> {toy.playDescription}</p>
-              {toy.history && <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>History:</strong> {toy.history}</p>}
-              <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-                <button
-                  onClick={function () { decide(toy.id, 'PUBLISHED'); }}
-                  style={{ flex: 1, background: '#2C9D8F', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
-                >
-                  Approve
-                </button>
-                <button
-                  onClick={function () { decide(toy.id, 'REJECTED'); }}
-                  style={{ flex: 1, background: '#999', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
-                >
-                  Reject
-                </button>
-              </div>
+
+              {isOpen && (
+                <div>
+                  <div onClick={function () { setExpandedId(null); }} style={{ cursor: 'pointer', color: colors.ink, fontSize: 13, fontWeight: 700, marginBottom: 12 }}>
+                    &larr; Collapse
+                  </div>
+
+                  {editData.photoUrl && (
+                    <img src={editData.photoUrl} alt={editData.name} style={{ width: '100%', maxWidth: 320, height: 240, objectFit: 'cover', borderRadius: 12, marginBottom: 10, display: 'block' }} />
+                  )}
+
+                  <div style={labelStyle}>Photo URL</div>
+                  <input style={inputStyle} value={editData.photoUrl}
+                    onChange={function (e) { setEditData(Object.assign({}, editData, { photoUrl: e.target.value })); }} />
+
+                  <div style={labelStyle}>Name</div>
+                  <input style={inputStyle} value={editData.name}
+                    onChange={function (e) { setEditData(Object.assign({}, editData, { name: e.target.value })); }} />
+
+                  <div style={labelStyle}>Country</div>
+                  <input style={inputStyle} value={editData.country}
+                    onChange={function (e) { setEditData(Object.assign({}, editData, { country: e.target.value })); }} />
+
+                  <div style={labelStyle}>Materials</div>
+                  <input style={inputStyle} value={editData.materials}
+                    onChange={function (e) { setEditData(Object.assign({}, editData, { materials: e.target.value })); }} />
+
+                  <div style={labelStyle}>How it's played</div>
+                  <textarea style={Object.assign({}, inputStyle, { minHeight: 70 })} value={editData.playDescription}
+                    onChange={function (e) { setEditData(Object.assign({}, editData, { playDescription: e.target.value })); }} />
+
+                  <div style={labelStyle}>History</div>
+                  <textarea style={Object.assign({}, inputStyle, { minHeight: 70 })} value={editData.history}
+                    onChange={function (e) { setEditData(Object.assign({}, editData, { history: e.target.value })); }} />
+
+                  <button
+                    onClick={function () { saveEdits(toy.id); }}
+                    style={{ width: '100%', background: colors.ink, color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700, marginBottom: 10 }}
+                  >
+                    Save changes
+                  </button>
+                  {saveMsg && <p style={{ fontSize: 12, color: '#2C9D8F', marginBottom: 10 }}>{saveMsg}</p>}
+
+                  <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
+                    <button
+                      onClick={function () { decide(toy.id, 'PUBLISHED'); setExpandedId(null); }}
+                      style={{ flex: 1, background: '#2C9D8F', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={function () { decide(toy.id, 'REJECTED'); setExpandedId(null); }}
+                      style={{ flex: 1, background: '#999', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
