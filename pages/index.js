@@ -13,7 +13,7 @@ export async function getServerSideProps() {
 
 const colors = {
   ink: '#1E56D6',
-  mango: '#F3A73A',
+  mango: '#FFD400',
   coral: '#FF9478',
   jade: '#F2A9C2',
   paper: '#FBF5E9',
@@ -52,14 +52,14 @@ export default function Home(props) {
       <header style={{ background: colors.ink, color: '#fff', padding: '20px 18px 28px', borderRadius: '0 0 24px 24px' }}>
         <div style={{ fontWeight: 800, fontSize: 24, marginBottom: 12, color: colors.mango }}>Toys of the World</div>
         <h1 style={{ fontSize: 24, lineHeight: 1.2, margin: '0 0 12px', color: '#fff' }}>Discover toys around the world and their history</h1>
-        <p style={{ fontSize: 14, lineHeight: 1.55, margin: '0 0 10px', fontWeight: 700, color: colors.mango }}>
+        <p style={{ fontSize: 14, lineHeight: 1.55, margin: '0 0 10px', fontWeight: 700, color: '#fff' }}>
           Browse and learn what toys kids have used since the beginning of time.
         </p>
-        <p style={{ fontSize: 14, lineHeight: 1.55, margin: '0 0 10px', fontWeight: 700, color: colors.coral }}>
+        <p style={{ fontSize: 14, lineHeight: 1.55, margin: '0 0 10px', fontWeight: 700, color: '#fff' }}>
           Upload it yourself! If you know of a toy that could be in this app, please get in touch with us.
           Every toy added helps us build the biggest toy library in the world.
         </p>
-        <p style={{ fontSize: 14, lineHeight: 1.55, margin: 0, fontWeight: 700, color: colors.jade }}>
+        <p style={{ fontSize: 14, lineHeight: 1.55, margin: 0, fontWeight: 700, color: '#fff' }}>
           This app is for everyone passionate about toys: kids, young people, historians, parents, schools, and community organisations.
         </p>
       </header>
