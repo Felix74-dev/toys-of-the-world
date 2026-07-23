@@ -26,7 +26,7 @@ export default function Home(props) {
   const [region, setRegion] = useState('all');
   const [toys, setToys] = useState(initialToys);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ name: '', country: '', materials: '', playDescription: '', source: '' });
+  const [formData, setFormData] = useState({ name: '', country: '', region: 'samerica', materials: '', playDescription: '', source: '' });
   const [submitMessage, setSubmitMessage] = useState('');
   const [photoFile, setPhotoFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -75,7 +75,7 @@ export default function Home(props) {
       .then(function (data) {
         setUploading(false);
         setSubmitMessage('Thanks! Your toy is pending review.');
-        setFormData({ name: '', country: '', materials: '', playDescription: '', source: '' });
+        setFormData({ name: '', country: '', region: 'samerica', materials: '', playDescription: '', source: '' });
         setPhotoFile(null);
       });
   }
@@ -180,6 +180,17 @@ export default function Home(props) {
                 <input placeholder="Where is this toy played? (country/region)" value={formData.country}
                   onChange={function (e) { setFormData(Object.assign({}, formData, { country: e.target.value })); }}
                   style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: colors.ink, marginBottom: 6 }}>Continent / region category</label>
+                <select value={formData.region}
+                  onChange={function (e) { setFormData(Object.assign({}, formData, { region: e.target.value })); }}
+                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd', background: '#fff' }}>
+                  <option value="samerica">South America</option>
+                  <option value="africa">Africa</option>
+                  <option value="asia">Asia</option>
+                  <option value="europe">Europe</option>
+                  <option value="oceania">Oceania</option>
+                  <option value="namerica">North America</option>
+                </select>
                 <input placeholder="Materials" value={formData.materials}
                   onChange={function (e) { setFormData(Object.assign({}, formData, { materials: e.target.value })); }}
                   style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
