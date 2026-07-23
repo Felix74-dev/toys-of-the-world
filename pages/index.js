@@ -14,6 +14,7 @@ export default function Admin() {
   const [published, setPublished] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [expandedId, setExpandedId] = useState(null);
 
   function loadAll(pw) {
     setLoading(true);
@@ -94,32 +95,63 @@ export default function Admin() {
       {pending.length === 0 && <p>Nothing waiting for review right now.</p>}
       <div style={{ display: 'grid', gap: 16, marginTop: 16, marginBottom: 36 }}>
         {pending.map(function (toy) {
+          const isOpen = expandedId === toy.id;
+          const photo = toy.media && toy.media[0] ? toy.media[0].url : null;
           return (
             <div key={toy.id} style={{ background: '#fff', borderRadius: 14, padding: 16, border: '1px solid #eee' }}>
-              {toy.media && toy.media[0] && (
-                <a href={toy.media[0].url} target="_blank" rel="noreferrer">
-                  <img src={toy.media[0].url} alt={toy.name} style={{ width: 160, height: 160, objectFit: 'cover', borderRadius: 12, marginBottom: 10, display: 'block' }} />
-                </a>
+              {!isOpen && (
+                <div onClick={function () { setExpandedId(toy.id); }} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12 }}>
+                  {photo && <img src={photo} alt={toy.name} style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 10 }} />}
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ margin: '0 0 2px', color: colors.ink }}>{toy.name}</h3>
+                    <p style={{ fontSize: 12, color: '#666', margin: 0 }}>{toy.country}</p>
+                  </div>
+                  <span style={{ color: colors.ink, fontSize: 13, fontWeight: 700 }}>Review &rarr;</span>
+                </div>
               )}
-              <h3 style={{ margin: '0 0 4px', color: colors.ink }}>{toy.name}</h3>
-              <p style={{ fontSize: 13, color: '#666', margin: '0 0 8px' }}>{toy.country} &middot; {toy.region}</p>
-              <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>Materials:</strong> {toy.materials}</p>
-              <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>Description:</strong> {toy.playDescription}</p>
-              {toy.history && <p style={{ fontSize: 13, margin: '0 0 8px' }}><strong>History:</strong> {toy.history}</p>}
-              <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-                <button
-                  onClick={function () { decide(toy.id, 'PUBLISHED'); }}
-                  style={{ flex: 1, background: '#2C9D8F', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
-                >
-                  Approve
-                </button>
-                <button
-                  onClick={function () { decide(toy.id, 'REJECTED'); }}
-                  style={{ flex: 1, background: '#999', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
-                >
-                  Reject
-                </button>
-              </div>
+
+              {isOpen && (
+                <div>
+                  <div onClick={function () { setExpandedId(null); }} style={{ cursor: 'pointer', color: colors.ink, fontSize: 13, fontWeight: 700, marginBottom: 12 }}>
+                    &larr; Collapse
+                  </div>
+                  {photo && (
+                    <a href={photo} target="_blank" rel="noreferrer">
+                      <img src={photo} alt={toy.name} style={{ width: '100%', maxWidth: 320, height: 240, objectFit: 'cover', borderRadius: 12, marginBottom: 14, display: 'block' }} />
+                    </a>
+                  )}
+                  <h3 style={{ margin: '0 0 4px', color: colors.ink, fontSize: 20 }}>{toy.name}</h3>
+                  <p style={{ fontSize: 13, color: '#666', margin: '0 0 14px' }}>{toy.country} &middot; {toy.region}</p>
+
+                  <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 4 }}>Materials</div>
+                  <p style={{ fontSize: 14, margin: '0 0 14px' }}>{toy.materials}</p>
+
+                  <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 4 }}>How it's played</div>
+                  <p style={{ fontSize: 14, margin: '0 0 14px' }}>{toy.playDescription}</p>
+
+                  {toy.history && (
+                    <div>
+                      <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 4 }}>History</div>
+                      <p style={{ fontSize: 14, margin: '0 0 14px' }}>{toy.history}</p>
+                    </div>
+                  )}
+
+                  <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
+                    <button
+                      onClick={function () { decide(toy.id, 'PUBLISHED'); setExpandedId(null); }}
+                      style={{ flex: 1, background: '#2C9D8F', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={function () { decide(toy.id, 'REJECTED'); setExpandedId(null); }}
+                      style={{ flex: 1, background: '#999', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
