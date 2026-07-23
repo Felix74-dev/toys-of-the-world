@@ -152,7 +152,7 @@ export default function Home(props) {
                   Submissions are reviewed by our team before they're published, so it may take a little while to appear.
                 </p>
                 <button onClick={handleSubmit} style={{ width: '100%', background: '#E8604B', color: '#fff', border: 'none', padding: 13, borderRadius: 12, fontWeight: 700 }}>
-                  Add to the library
+                  Submit for approval
                 </button>
               </div>
             )}
