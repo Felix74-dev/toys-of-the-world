@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
 import { prisma } from '../lib/prisma';
 import { supabase } from '../lib/supabaseClient';
 
@@ -30,6 +31,7 @@ export default function Home(props) {
   const [submitMessage, setSubmitMessage] = useState('');
   const [photoFile, setPhotoFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     fetch('/api/toys?region=' + region)
@@ -77,10 +79,19 @@ export default function Home(props) {
         setSubmitMessage('Thanks! Your toy is pending review.');
         setFormData({ name: '', country: '', region: 'samerica', materials: '', playDescription: '', source: '' });
         setPhotoFile(null);
+      })
+      .catch(function (err) {
+        setUploading(false);
+        setSubmitError('Something went wrong submitting your toy. Please check your connection and try again.');
       });
   }
 
   return (
+    <>
+    <Head>
+      <title>Toys of the World</title>
+      <meta name="description" content="Discover toys around the world and their history. Browse and learn what toys kids have used since the beginning of time, and share the ones you know." />
+    </Head>
     <main style={{ fontFamily: 'sans-serif', background: colors.paper, minHeight: '100vh', color: colors.charcoal }}>
       <header style={{ background: colors.ink, color: '#fff', padding: '20px 18px 28px', borderRadius: '0 0 24px 24px' }}>
         <div style={{ fontWeight: 800, fontSize: 24, marginBottom: 12, color: colors.mango }}>Toys of the World</div>
@@ -210,11 +221,17 @@ export default function Home(props) {
                 <button onClick={handleSubmit} disabled={uploading} style={{ width: '100%', background: '#E8604B', color: '#fff', border: 'none', padding: 13, borderRadius: 12, fontWeight: 700 }}>
                   {uploading ? 'Submitting...' : 'Submit for approval'}
                 </button>
+                {submitError && <p style={{ fontSize: 12, color: '#E8604B', marginTop: 10 }}>{submitError}</p>}
               </div>
             )}
           </div>
         </div>
       )}
+
+      <footer style={{ textAlign: 'center', padding: '20px 16px 90px', fontSize: 12, color: '#8a8267' }}>
+        Questions or want to add a toy for us? <a href="mailto:hello@toysoftheworld.app" style={{ color: colors.ink, fontWeight: 700 }}>hello@toysoftheworld.app</a>
+      </footer>
     </main>
+    </>
   );
 }
