@@ -65,7 +65,7 @@ model Toy {
   id                 String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name               String
   country            String
-  region             String
+  region              String
   materials          String
   playDescription    String     @map("play_description")
   history            String?
@@ -73,6 +73,7 @@ model Toy {
   submittedBy        User?      @relation("SubmittedBy", fields: [submittedById], references: [id])
   submittedById      String?    @map("submitted_by") @db.Uuid
   submittedByClerkId String?    @map("submitted_by_clerk_id")
+  submitterEmail     String?    @map("submitter_email")
   createdAt          DateTime   @default(now()) @map("created_at")
   updatedAt          DateTime   @default(now()) @map("updated_at")
 
