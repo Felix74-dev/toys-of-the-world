@@ -1,4 +1,5 @@
 import { prisma } from '../../lib/prisma';
+import Head from 'next/head';
 
 export async function getServerSideProps(context) {
   const id = context.params.id;
@@ -27,6 +28,11 @@ export default function ToyDetail(props) {
   const photo = toy.media && toy.media[0] ? toy.media[0].url : 'https://loremflickr.com/400/400/toy,wood';
 
   return (
+    <>
+    <Head>
+      <title>{toy.name + ' — Toys of the World'}</title>
+      <meta name="description" content={toy.playDescription} />
+    </Head>
     <main style={{ fontFamily: 'sans-serif', background: colors.paper, minHeight: '100vh', color: colors.charcoal }}>
       <div style={{ background: colors.ink, padding: '18px 20px' }}>
         <a href="/" style={{ color: '#fff', fontSize: 14, textDecoration: 'none', fontWeight: 600 }}>&larr; Back to all toys</a>
@@ -75,5 +81,6 @@ export default function ToyDetail(props) {
         )}
       </div>
     </main>
+    </>
   );
 }
