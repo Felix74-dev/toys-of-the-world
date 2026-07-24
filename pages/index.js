@@ -204,6 +204,11 @@ export default function Home(props) {
           <div style={{ background: colors.paper, width: '100%', maxWidth: 480, borderRadius: '20px 20px 0 0', padding: 20, maxHeight: '85vh', overflowY: 'auto' }}>
             <button onClick={function () { setShowForm(false); }} style={{ float: 'right', border: 'none', background: '#fff', borderRadius: 999, width: 32, height: 32 }}>x</button>
             <h2 style={{ color: colors.ink }}>Share a toy</h2>
+            {user && user.primaryEmailAddress && (
+              <p style={{ fontSize: 12, color: '#8a8267', marginTop: -8, marginBottom: 14 }}>
+                Submitting as: <strong>{user.primaryEmailAddress.emailAddress}</strong>
+              </p>
+            )}
             {submitMessage ? (
               <p>{submitMessage}</p>
             ) : (
