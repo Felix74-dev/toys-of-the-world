@@ -180,6 +180,10 @@ export default function Admin() {
                   <textarea style={Object.assign({}, inputStyle, { minHeight: 70 })} value={editData.history}
                     onChange={function (e) { setEditData(Object.assign({}, editData, { history: e.target.value })); }} />
 
+                  {toy.submitterEmail && (
+                    <p style={{ fontSize: 12, color: '#8a8267', marginBottom: 12 }}>Submitted by: {toy.submitterEmail}</p>
+                  )}
+
                   <button
                     onClick={function () { saveEdits(toy.id); }}
                     style={{ width: '100%', background: colors.ink, color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700, marginBottom: 10 }}
