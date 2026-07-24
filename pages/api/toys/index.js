@@ -26,6 +26,7 @@ export default async function handler(req, res) {
     const history = req.body.history;
     const submittedById = req.body.submittedById;
     const photoUrl = req.body.photoUrl;
+    const clerkUserId = req.body.clerkUserId;
 
     if (!name || !country || !materials || !playDescription) {
       return res.status(400).json({ error: 'Missing required fields.' });
@@ -41,6 +42,7 @@ export default async function handler(req, res) {
         history: history || '',
         status: 'PENDING',
         submittedById: submittedById || null,
+        submittedByClerkId: clerkUserId || null,
         media: photoUrl ? { create: [{ url: photoUrl, isPrimary: true }] } : undefined,
       },
     });
