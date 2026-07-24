@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from '@clerk/nextjs';
 import { prisma } from '../lib/prisma';
 import { supabase } from '../lib/supabaseClient';
 
@@ -24,6 +24,7 @@ const colors = {
 };
 
 export default function Home(props) {
+  const { user } = useUser();
   const initialToys = props.initialToys;
   const [region, setRegion] = useState('all');
   const [toys, setToys] = useState(initialToys);
@@ -67,7 +68,7 @@ export default function Home(props) {
   }
 
   function sendToyData(photoUrl) {
-    const payload = Object.assign({}, formData, { photoUrl: photoUrl });
+    const payload = Object.assign({}, formData, { photoUrl: photoUrl, clerkUserId: user ? user.id : null });
 
     return fetch('/api/toys', {
       method: 'POST',
@@ -111,6 +112,7 @@ export default function Home(props) {
               </SignUpButton>
             </SignedOut>
             <SignedIn>
+              <a href="/my-toys" style={{ color: '#fff', fontSize: 12, fontWeight: 700, marginRight: 10, textDecoration: 'none' }}>My submissions</a>
               <UserButton />
             </SignedIn>
           </div>
