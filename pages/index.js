@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
 import { prisma } from '../lib/prisma';
 import { supabase } from '../lib/supabaseClient';
 
@@ -94,7 +95,26 @@ export default function Home(props) {
     </Head>
     <main style={{ fontFamily: 'sans-serif', background: colors.paper, minHeight: '100vh', color: colors.charcoal }}>
       <header style={{ background: colors.ink, color: '#fff', padding: '20px 18px 28px', borderRadius: '0 0 24px 24px' }}>
-        <div style={{ fontWeight: 800, fontSize: 24, marginBottom: 12, color: colors.mango }}>Toys of the World</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <div style={{ fontWeight: 800, fontSize: 24, color: colors.mango }}>Toys of the World</div>
+          <div>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', border: 'none', padding: '7px 14px', borderRadius: 999, fontSize: 12, fontWeight: 700, marginRight: 6 }}>
+                  Sign in
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button style={{ background: colors.mango, color: colors.ink, border: 'none', padding: '7px 14px', borderRadius: 999, fontSize: 12, fontWeight: 700 }}>
+                  Sign up
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>
+        </div>
         <h1 style={{ fontSize: 24, lineHeight: 1.2, margin: '0 0 12px', color: '#fff' }}>Discover toys around the world and their history</h1>
         <p style={{ fontSize: 14, lineHeight: 1.55, margin: '0 0 10px', fontWeight: 700, color: '#fff' }}>
           Browse and learn what toys kids have used since the beginning of time.
