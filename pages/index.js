@@ -68,7 +68,8 @@ export default function Home(props) {
   }
 
   function sendToyData(photoUrl) {
-    const payload = Object.assign({}, formData, { photoUrl: photoUrl, clerkUserId: user ? user.id : null });
+    const email = user && user.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : null;
+    const payload = Object.assign({}, formData, { photoUrl: photoUrl, clerkUserId: user ? user.id : null, submitterEmail: email });
 
     return fetch('/api/toys', {
       method: 'POST',
