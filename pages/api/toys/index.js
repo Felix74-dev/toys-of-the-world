@@ -11,6 +11,7 @@ export default async function handler(req, res) {
       include: {
         media: { where: { isPrimary: true }, take: 1 },
         collector: true,
+        translations: true,
       },
       orderBy: { createdAt: 'desc' },
     });
