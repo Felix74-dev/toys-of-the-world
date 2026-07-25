@@ -1,6 +1,7 @@
 import { prisma } from '../../lib/prisma';
 import Head from 'next/head';
 import { useState } from 'react';
+import { SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
 
 export async function getServerSideProps(context) {
   const id = context.params.id;
@@ -25,9 +26,9 @@ const colors = {
 };
 
 const labels = {
-  en: { back: '\u2190 Back to all toys', playedIn: 'Played in:', materials: "What it's made of", play: 'How to play', history: 'A little history', collector: "Collector's Corner", see: 'See the collection \u2192' },
-  es: { back: '\u2190 Volver a todos los juguetes', playedIn: 'Se juega en:', materials: 'De qu\u00e9 est\u00e1 hecho', play: 'C\u00f3mo se juega', history: 'Un poco de historia', collector: 'Rinc\u00f3n del coleccionista', see: 'Ver la colecci\u00f3n \u2192' },
-  fr: { back: '\u2190 Retour \u00e0 tous les jouets', playedIn: 'Jou\u00e9 en :', materials: 'De quoi il est fait', play: 'Comment jouer', history: 'Un peu d\'histoire', collector: 'Coin des collectionneurs', see: 'Voir la collection \u2192' },
+  en: { back: '\u2190 Back to all toys', playedIn: 'Played in:', materials: "What it's made of", play: 'How to play', history: 'A little history', collector: "Collector's Corner", see: 'See the collection \u2192', membersOnly: 'Sign in as a member to see this collector and their link.', signInToView: 'Sign in to view' },
+  es: { back: '\u2190 Volver a todos los juguetes', playedIn: 'Se juega en:', materials: 'De qu\u00e9 est\u00e1 hecho', play: 'C\u00f3mo se juega', history: 'Un poco de historia', collector: 'Rinc\u00f3n del coleccionista', see: 'Ver la colecci\u00f3n \u2192', membersOnly: 'Inicia sesi\u00f3n como miembro para ver a este coleccionista y su enlace.', signInToView: 'Iniciar sesi\u00f3n para ver' },
+  fr: { back: '\u2190 Retour \u00e0 tous les jouets', playedIn: 'Jou\u00e9 en :', materials: 'De quoi il est fait', play: 'Comment jouer', history: 'Un peu d\'histoire', collector: 'Coin des collectionneurs', see: 'Voir la collection \u2192', membersOnly: 'Connectez-vous en tant que membre pour voir ce collectionneur et son lien.', signInToView: 'Se connecter pour voir' },
 };
 
 function getTranslated(toy, lang, field) {
@@ -100,15 +101,30 @@ export default function ToyDetail(props) {
             <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#2C9D8F', marginBottom: 8 }}>
               {l.collector}
             </div>
-            <strong style={{ display: 'block', fontSize: 14, color: colors.ink }}>{toy.collector.collectorName}</strong>
-            <span style={{ fontSize: 12, color: '#8a8267' }}>{toy.collector.collectorRegion}</span>
-            <p style={{ fontSize: 13, margin: '10px 0' }}>{toy.collector.description}</p>
-            <a href={toy.collector.destinationUrl} style={{
-              display: 'block', textAlign: 'center', background: colors.ink, color: '#fff',
-              padding: 10, borderRadius: 10, fontWeight: 700, fontSize: 13, textDecoration: 'none',
-            }}>
-              {l.see}
-            </a>
+            <SignedIn>
+              <strong style={{ display: 'block', fontSize: 14, color: colors.ink }}>{toy.collector.collectorName}</strong>
+              <span style={{ fontSize: 12, color: '#8a8267' }}>{toy.collector.collectorRegion}</span>
+              <p style={{ fontSize: 13, margin: '10px 0' }}>{toy.collector.description}</p>
+              <a href={toy.collector.destinationUrl} style={{
+                display: 'block', textAlign: 'center', background: colors.ink, color: '#fff',
+                padding: 10, borderRadius: 10, fontWeight: 700, fontSize: 13, textDecoration: 'none',
+              }}>
+                {l.see}
+              </a>
+            </SignedIn>
+            <SignedOut>
+              <p style={{ fontSize: 13, color: '#8a8267', margin: '0 0 12px' }}>
+                {l.membersOnly}
+              </p>
+              <SignInButton mode="modal">
+                <button style={{
+                  display: 'block', width: '100%', textAlign: 'center', background: colors.ink, color: '#fff',
+                  border: 'none', padding: 10, borderRadius: 10, fontWeight: 700, fontSize: 13,
+                }}>
+                  {l.signInToView}
+                </button>
+              </SignInButton>
+            </SignedOut>
           </div>
         )}
       </div>
