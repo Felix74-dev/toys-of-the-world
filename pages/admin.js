@@ -47,13 +47,16 @@ export default function Admin() {
   function openReview(toy) {
     setExpandedId(toy.id);
     setSaveMsg('');
+    const media = toy.media || [];
     setEditData({
       name: toy.name,
       country: toy.country,
       materials: toy.materials,
       playDescription: toy.playDescription,
       history: toy.history || '',
-      photoUrl: toy.media && toy.media[0] ? toy.media[0].url : '',
+      photoUrl1: media[0] ? media[0].url : '',
+      photoUrl2: media[1] ? media[1].url : '',
+      photoUrl3: media[2] ? media[2].url : '',
       civilisationCulture: toy.civilisationCulture || '',
       datePeriod: toy.datePeriod || '',
       evidenceStatus: toy.evidenceStatus || '',
@@ -73,16 +76,20 @@ export default function Admin() {
     })
       .then(function (r) { return r.json(); })
       .then(function () {
+        const newMedia = [editData.photoUrl1, editData.photoUrl2, editData.photoUrl3]
+          .filter(Boolean)
+          .map(function (u) { return { url: u }; });
+
         setPending(pending.map(function (t) {
           if (t.id !== toyId) return t;
           const updated = Object.assign({}, t, editData);
-          updated.media = editData.photoUrl ? [{ url: editData.photoUrl }] : t.media;
+          updated.media = newMedia;
           return updated;
         }));
         setPublished(published.map(function (t) {
           if (t.id !== toyId) return t;
           const updated = Object.assign({}, t, editData);
-          updated.media = editData.photoUrl ? [{ url: editData.photoUrl }] : t.media;
+          updated.media = newMedia;
           return updated;
         }));
         setSaveMsg('Saved!');
@@ -147,13 +154,23 @@ export default function Admin() {
           &larr; Collapse
         </div>
 
-        {editData.photoUrl && (
-          <img src={editData.photoUrl} alt={editData.name} style={{ width: '100%', maxWidth: 320, height: 240, objectFit: 'cover', borderRadius: 12, marginBottom: 10, display: 'block' }} />
-        )}
+        <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
+          {[editData.photoUrl1, editData.photoUrl2, editData.photoUrl3].map(function (u, i) {
+            return u ? <img key={i} src={u} alt="" style={{ width: 70, height: 70, objectFit: 'cover', borderRadius: 8 }} /> : null;
+          })}
+        </div>
 
-        <div style={labelStyle}>Photo URL</div>
-        <input style={inputStyle} value={editData.photoUrl}
-          onChange={function (e) { setEditData(Object.assign({}, editData, { photoUrl: e.target.value })); }} />
+        <div style={labelStyle}>Photo 1 (main)</div>
+        <input style={inputStyle} value={editData.photoUrl1}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { photoUrl1: e.target.value })); }} />
+
+        <div style={labelStyle}>Photo 2</div>
+        <input style={inputStyle} value={editData.photoUrl2}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { photoUrl2: e.target.value })); }} />
+
+        <div style={labelStyle}>Photo 3</div>
+        <input style={inputStyle} value={editData.photoUrl3}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { photoUrl3: e.target.value })); }} />
 
         <div style={labelStyle}>Name</div>
         <input style={inputStyle} value={editData.name}
