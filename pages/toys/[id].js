@@ -89,7 +89,20 @@ export default function ToyDetail(props) {
       </div>
 
       <div style={{ padding: 20, maxWidth: 560, margin: '0 auto' }}>
-        <img src={photo} alt={name} style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 16, marginBottom: 16 }} />
+        {toy.media && toy.media.length > 0 ? (
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+            {toy.media.slice(0, 3).map(function (m, i) {
+              return (
+                <img key={i} src={m.url} alt={name} style={{
+                  width: toy.media.length === 1 ? '100%' : 'calc((100% - 16px) / ' + Math.min(toy.media.length, 3) + ')',
+                  height: 200, objectFit: 'cover', borderRadius: 16,
+                }} />
+              );
+            })}
+          </div>
+        ) : (
+          <img src={photo} alt={name} style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 16, marginBottom: 16 }} />
+        )}
 
         <h1 style={{ color: colors.ink, fontSize: 26, margin: '0 0 6px' }}>{name}</h1>
         <div style={{ fontSize: 14, color: colors.coral, fontWeight: 600, marginBottom: 6 }}>{l.playedIn} {country}</div>
