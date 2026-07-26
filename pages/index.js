@@ -313,4 +313,30 @@ export default function Home(props) {
                   onChange={function (e) { setFormData(Object.assign({}, formData, { materials: e.target.value })); }}
                   style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
                 <textarea placeholder={s.descPlaceholder} value={formData.playDescription}
-                  onChange={function (e) { s
+                  onChange={function (e) { setFormData(Object.assign({}, formData, { playDescription: e.target.value })); }}
+                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd', minHeight: 70 }} />
+                <input placeholder={s.sourcePlaceholder} value={formData.source}
+                  onChange={function (e) { setFormData(Object.assign({}, formData, { source: e.target.value })); }}
+                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: colors.ink, marginBottom: 6 }}>{s.photoLabel}</label>
+                <input type="file" accept="image/*"
+                  onChange={function (e) { setPhotoFile(e.target.files[0]); }}
+                  style={{ width: '100%', marginBottom: 14, fontSize: 12 }} />
+                <p style={{ fontSize: 11.5, color: '#8a8267', margin: '0 0 12px' }}>{s.reviewNote}</p>
+                <button onClick={handleSubmit} disabled={uploading} style={{ width: '100%', background: '#E8604B', color: '#fff', border: 'none', padding: 13, borderRadius: 12, fontWeight: 700 }}>
+                  {uploading ? s.submitting : s.submitBtn}
+                </button>
+                {submitError && <p style={{ fontSize: 12, color: '#E8604B', marginTop: 10 }}>{submitError}</p>}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <footer style={{ textAlign: 'center', padding: '20px 16px 90px', fontSize: 12, color: '#8a8267' }}>
+        {s.footerText} <a href="mailto:hello@toysoftheworld.app" style={{ color: colors.ink, fontWeight: 700 }}>hello@toysoftheworld.app</a>
+      </footer>
+    </main>
+    </>
+  );
+}
