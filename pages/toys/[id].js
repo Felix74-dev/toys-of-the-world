@@ -32,6 +32,10 @@ const labels = {
     overview: 'Resumen', culture: 'Civilizaci\u00f3n / Cultura', period: 'Fecha / Periodo', evidence: 'Estado de la evidencia', significance: 'Significado cultural', facts: 'Datos curiosos', museumRefs: 'Referencias de museos y arqueolog\u00eda', imageRefs: 'Referencias de imagen' },
   fr: { back: '\u2190 Retour \u00e0 tous les jouets', playedIn: 'Jou\u00e9 en :', materials: 'De quoi il est fait', play: 'Comment jouer', history: 'Un peu d\'histoire', collector: 'Coin des collectionneurs', see: 'Voir la collection \u2192', membersOnly: 'Connectez-vous en tant que membre pour voir ce collectionneur et son lien.', signInToView: 'Se connecter pour voir',
     overview: 'Aper\u00e7u', culture: 'Civilisation / Culture', period: 'Date / P\u00e9riode', evidence: '\u00c9tat des preuves', significance: 'Importance culturelle', facts: 'Anecdotes', museumRefs: 'R\u00e9f\u00e9rences de mus\u00e9es et arch\u00e9ologiques', imageRefs: 'R\u00e9f\u00e9rences d\'image' },
+  zh: { back: '\u2190 \u8fd4\u56de\u6240\u6709\u73a9\u5177', playedIn: '\u6d41\u884c\u4e8e\uff1a', materials: '\u5236\u4f5c\u6750\u6599', play: '\u73a9\u6cd5', history: '\u4e00\u70b9\u5386\u53f2', collector: '\u6536\u85cf\u8005\u89d2\u843d', see: '\u67e5\u770b\u6536\u85cf \u2192', membersOnly: '\u767b\u5f55\u4f1a\u5458\u8d26\u6237\u4ee5\u67e5\u770b\u6b64\u6536\u85cf\u8005\u53ca\u5176\u94fe\u63a5\u3002', signInToView: '\u767b\u5f55\u67e5\u770b',
+    overview: '\u6982\u89c8', culture: '\u6587\u660e/\u6587\u5316', period: '\u5e74\u4ee3/\u65f6\u671f', evidence: '\u8bc1\u636e\u72b6\u6001', significance: '\u6587\u5316\u610f\u4e49', facts: '\u8da3\u95fb\u8f38\u4e8b', museumRefs: '\u535a\u7269\u9986\u4e0e\u8003\u53e4\u53c2\u8003\u8d44\u6599', imageRefs: '\u56fe\u7247\u53c2\u8003\u6765\u6e90' },
+  ja: { back: '\u2190 \u3059\u3079\u3066\u306e\u304a\u3082\u3061\u3083\u306b\u623b\u308b', playedIn: '\u904a\u3070\u308c\u3066\u3044\u308b\u5834\u6240\uff1a', materials: '\u7d20\u6750', play: '\u9075\u3073\u65b9', history: '\u5c11\u3057\u306e\u6b74\u53f2', collector: '\u30b3\u30ec\u30af\u30bf\u30fc\u30ba\u30b3\u30fc\u30ca\u30fc', see: '\u30b3\u30ec\u30af\u30b7\u30e7\u30f3\u3092\u898b\u308b \u2192', membersOnly: '\u3053\u306e\u30b3\u30ec\u30af\u30bf\u30fc\u3068\u305d\u306e\u30ea\u30f3\u30af\u3092\u898b\u308b\u306b\u306f\u3001\u4f1a\u54e1\u3068\u3057\u3066\u30b5\u30a4\u30f3\u30a4\u30f3\u3057\u3066\u304f\u3060\u3055\u3044\u3002', signInToView: '\u30b5\u30a4\u30f3\u30a4\u30f3\u3057\u3066\u898b\u308b',
+    overview: '\u6982\u8981', culture: '\u6587\u660e/\u6587\u5316', period: '\u5e74\u4ee3/\u6642\u4ee3', evidence: '\u8a3c\u62e0\u306e\u30b9\u30c6\u30fc\u30bf\u30b9', significance: '\u6587\u5316\u7684\u610f\u7fa9', facts: '\u8c46\u77e5\u8b58', museumRefs: '\u535a\u7269\u9928\u30fb\u8003\u53e4\u5b66\u53c2\u8003\u8cc7\u6599', imageRefs: '\u753b\u50cf\u53c2\u7167' },
 };
 
 function getTranslated(toy, lang, field) {
@@ -75,7 +79,7 @@ export default function ToyDetail(props) {
       <div style={{ background: colors.ink, padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <a href="/" style={{ color: '#fff', fontSize: 14, textDecoration: 'none', fontWeight: 600 }}>{l.back}</a>
         <div style={{ display: 'flex', gap: 4, background: 'rgba(255,255,255,0.12)', borderRadius: 999, padding: 3 }}>
-          {['en', 'es', 'fr'].map(function (code) {
+          {['en', 'es', 'fr', 'zh', 'ja'].map(function (code) {
             return (
               <button key={code} onClick={function () { setLang(code); }}
                 style={{ border: 'none', background: lang === code ? '#FFD400' : 'transparent', color: lang === code ? colors.ink : '#fff', fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 999 }}>
