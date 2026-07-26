@@ -19,6 +19,14 @@ export default async function handler(req, res) {
   const playDescription = req.body.playDescription;
   const history = req.body.history;
   const photoUrl = req.body.photoUrl;
+  const civilisationCulture = req.body.civilisationCulture;
+  const datePeriod = req.body.datePeriod;
+  const evidenceStatus = req.body.evidenceStatus;
+  const description = req.body.description;
+  const culturalSignificance = req.body.culturalSignificance;
+  const interestingFacts = req.body.interestingFacts;
+  const museumReferences = req.body.museumReferences;
+  const imageReferences = req.body.imageReferences;
 
   const toy = await prisma.toy.update({
     where: { id: toyId },
@@ -28,6 +36,14 @@ export default async function handler(req, res) {
       materials: materials,
       playDescription: playDescription,
       history: history,
+      civilisationCulture: civilisationCulture,
+      datePeriod: datePeriod,
+      evidenceStatus: evidenceStatus,
+      description: description,
+      culturalSignificance: culturalSignificance,
+      interestingFacts: interestingFacts,
+      museumReferences: museumReferences,
+      imageReferences: imageReferences,
     },
   });
 
