@@ -54,6 +54,14 @@ export default function Admin() {
       playDescription: toy.playDescription,
       history: toy.history || '',
       photoUrl: toy.media && toy.media[0] ? toy.media[0].url : '',
+      civilisationCulture: toy.civilisationCulture || '',
+      datePeriod: toy.datePeriod || '',
+      evidenceStatus: toy.evidenceStatus || '',
+      description: toy.description || '',
+      culturalSignificance: toy.culturalSignificance || '',
+      interestingFacts: toy.interestingFacts || '',
+      museumReferences: toy.museumReferences || '',
+      imageReferences: toy.imageReferences || '',
     });
   }
 
@@ -66,6 +74,12 @@ export default function Admin() {
       .then(function (r) { return r.json(); })
       .then(function () {
         setPending(pending.map(function (t) {
+          if (t.id !== toyId) return t;
+          const updated = Object.assign({}, t, editData);
+          updated.media = editData.photoUrl ? [{ url: editData.photoUrl }] : t.media;
+          return updated;
+        }));
+        setPublished(published.map(function (t) {
           if (t.id !== toyId) return t;
           const updated = Object.assign({}, t, editData);
           updated.media = editData.photoUrl ? [{ url: editData.photoUrl }] : t.media;
@@ -125,6 +139,89 @@ export default function Admin() {
   const inputStyle = { width: '100%', padding: 10, marginBottom: 12, borderRadius: 10, border: '1px solid #ddd', fontSize: 14 };
   const labelStyle = { fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 4 };
 
+  function EditableToyForm(props) {
+    const toy = props.toy;
+    return (
+      <div>
+        <div onClick={function () { setExpandedId(null); }} style={{ cursor: 'pointer', color: colors.ink, fontSize: 13, fontWeight: 700, marginBottom: 12 }}>
+          &larr; Collapse
+        </div>
+
+        {editData.photoUrl && (
+          <img src={editData.photoUrl} alt={editData.name} style={{ width: '100%', maxWidth: 320, height: 240, objectFit: 'cover', borderRadius: 12, marginBottom: 10, display: 'block' }} />
+        )}
+
+        <div style={labelStyle}>Photo URL</div>
+        <input style={inputStyle} value={editData.photoUrl}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { photoUrl: e.target.value })); }} />
+
+        <div style={labelStyle}>Name</div>
+        <input style={inputStyle} value={editData.name}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { name: e.target.value })); }} />
+
+        <div style={labelStyle}>Country</div>
+        <input style={inputStyle} value={editData.country}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { country: e.target.value })); }} />
+
+        <div style={labelStyle}>Civilisation / Culture</div>
+        <input style={inputStyle} value={editData.civilisationCulture}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { civilisationCulture: e.target.value })); }} />
+
+        <div style={labelStyle}>Date / Period</div>
+        <input style={inputStyle} value={editData.datePeriod} placeholder="e.g. c. 500 BCE, 19th century"
+          onChange={function (e) { setEditData(Object.assign({}, editData, { datePeriod: e.target.value })); }} />
+
+        <div style={labelStyle}>Evidence Status</div>
+        <input style={inputStyle} value={editData.evidenceStatus} placeholder="e.g. Archaeological, Documented, Oral tradition"
+          onChange={function (e) { setEditData(Object.assign({}, editData, { evidenceStatus: e.target.value })); }} />
+
+        <div style={labelStyle}>Overview / General Description</div>
+        <textarea style={Object.assign({}, inputStyle, { minHeight: 60 })} value={editData.description}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { description: e.target.value })); }} />
+
+        <div style={labelStyle}>Materials</div>
+        <input style={inputStyle} value={editData.materials}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { materials: e.target.value })); }} />
+
+        <div style={labelStyle}>How it's played</div>
+        <textarea style={Object.assign({}, inputStyle, { minHeight: 70 })} value={editData.playDescription}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { playDescription: e.target.value })); }} />
+
+        <div style={labelStyle}>History</div>
+        <textarea style={Object.assign({}, inputStyle, { minHeight: 70 })} value={editData.history}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { history: e.target.value })); }} />
+
+        <div style={labelStyle}>Cultural Significance</div>
+        <textarea style={Object.assign({}, inputStyle, { minHeight: 60 })} value={editData.culturalSignificance}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { culturalSignificance: e.target.value })); }} />
+
+        <div style={labelStyle}>Interesting Facts</div>
+        <textarea style={Object.assign({}, inputStyle, { minHeight: 60 })} value={editData.interestingFacts}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { interestingFacts: e.target.value })); }} />
+
+        <div style={labelStyle}>Museum / Archaeological References</div>
+        <textarea style={Object.assign({}, inputStyle, { minHeight: 50 })} value={editData.museumReferences}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { museumReferences: e.target.value })); }} />
+
+        <div style={labelStyle}>Image References</div>
+        <textarea style={Object.assign({}, inputStyle, { minHeight: 50 })} value={editData.imageReferences}
+          onChange={function (e) { setEditData(Object.assign({}, editData, { imageReferences: e.target.value })); }} />
+
+        {toy.submitterEmail && (
+          <p style={{ fontSize: 12, color: '#8a8267', marginBottom: 12 }}>Submitted by: {toy.submitterEmail}</p>
+        )}
+
+        <button
+          onClick={function () { saveEdits(toy.id); }}
+          style={{ width: '100%', background: colors.ink, color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700, marginBottom: 10 }}
+        >
+          Save changes
+        </button>
+        {saveMsg && <p style={{ fontSize: 12, color: '#2C9D8F', marginBottom: 10 }}>{saveMsg}</p>}
+      </div>
+    );
+  }
+
   return (
     <main style={{ fontFamily: 'sans-serif', background: colors.paper, minHeight: '100vh', padding: 24 }}>
       <h1 style={{ color: colors.ink, fontSize: 22 }}>Pending submissions ({pending.length})</h1>
@@ -148,50 +245,7 @@ export default function Admin() {
 
               {isOpen && (
                 <div>
-                  <div onClick={function () { setExpandedId(null); }} style={{ cursor: 'pointer', color: colors.ink, fontSize: 13, fontWeight: 700, marginBottom: 12 }}>
-                    &larr; Collapse
-                  </div>
-
-                  {editData.photoUrl && (
-                    <img src={editData.photoUrl} alt={editData.name} style={{ width: '100%', maxWidth: 320, height: 240, objectFit: 'cover', borderRadius: 12, marginBottom: 10, display: 'block' }} />
-                  )}
-
-                  <div style={labelStyle}>Photo URL</div>
-                  <input style={inputStyle} value={editData.photoUrl}
-                    onChange={function (e) { setEditData(Object.assign({}, editData, { photoUrl: e.target.value })); }} />
-
-                  <div style={labelStyle}>Name</div>
-                  <input style={inputStyle} value={editData.name}
-                    onChange={function (e) { setEditData(Object.assign({}, editData, { name: e.target.value })); }} />
-
-                  <div style={labelStyle}>Country</div>
-                  <input style={inputStyle} value={editData.country}
-                    onChange={function (e) { setEditData(Object.assign({}, editData, { country: e.target.value })); }} />
-
-                  <div style={labelStyle}>Materials</div>
-                  <input style={inputStyle} value={editData.materials}
-                    onChange={function (e) { setEditData(Object.assign({}, editData, { materials: e.target.value })); }} />
-
-                  <div style={labelStyle}>How it's played</div>
-                  <textarea style={Object.assign({}, inputStyle, { minHeight: 70 })} value={editData.playDescription}
-                    onChange={function (e) { setEditData(Object.assign({}, editData, { playDescription: e.target.value })); }} />
-
-                  <div style={labelStyle}>History</div>
-                  <textarea style={Object.assign({}, inputStyle, { minHeight: 70 })} value={editData.history}
-                    onChange={function (e) { setEditData(Object.assign({}, editData, { history: e.target.value })); }} />
-
-                  {toy.submitterEmail && (
-                    <p style={{ fontSize: 12, color: '#8a8267', marginBottom: 12 }}>Submitted by: {toy.submitterEmail}</p>
-                  )}
-
-                  <button
-                    onClick={function () { saveEdits(toy.id); }}
-                    style={{ width: '100%', background: colors.ink, color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700, marginBottom: 10 }}
-                  >
-                    Save changes
-                  </button>
-                  {saveMsg && <p style={{ fontSize: 12, color: '#2C9D8F', marginBottom: 10 }}>{saveMsg}</p>}
-
+                  <EditableToyForm toy={toy} />
                   <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
                     <button
                       onClick={function () { decide(toy.id, 'PUBLISHED'); setExpandedId(null); }}
@@ -216,20 +270,34 @@ export default function Admin() {
       <h1 style={{ color: colors.ink, fontSize: 22 }}>Published toys ({published.length})</h1>
       <div style={{ display: 'grid', gap: 16, marginTop: 16 }}>
         {published.map(function (toy) {
+          const isOpen = expandedId === toy.id;
           return (
             <div key={toy.id} style={{ background: '#fff', borderRadius: 14, padding: 16, border: '1px solid #eee' }}>
-              <h3 style={{ margin: '0 0 4px', color: colors.ink }}>{toy.name}</h3>
-              <p style={{ fontSize: 13, color: '#666', margin: '0 0 8px' }}>{toy.country}</p>
-              <button
-                onClick={function () {
-                  if (window.confirm('Remove this toy from the library? This cannot be undone.')) {
-                    removeToy(toy.id);
-                  }
-                }}
-                style={{ background: '#E8604B', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700, width: '100%' }}
-              >
-                Remove from library
-              </button>
+              {!isOpen && (
+                <div>
+                  <h3 style={{ margin: '0 0 4px', color: colors.ink }}>{toy.name}</h3>
+                  <p style={{ fontSize: 13, color: '#666', margin: '0 0 8px' }}>{toy.country}</p>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <button
+                      onClick={function () { openReview(toy); }}
+                      style={{ flex: 1, background: colors.ink, color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={function () {
+                        if (window.confirm('Remove this toy from the library? This cannot be undone.')) {
+                          removeToy(toy.id);
+                        }
+                      }}
+                      style={{ flex: 1, background: '#E8604B', color: '#fff', border: 'none', padding: 10, borderRadius: 10, fontWeight: 700 }}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              )}
+              {isOpen && <EditableToyForm toy={toy} />}
             </div>
           );
         })}
