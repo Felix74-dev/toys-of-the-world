@@ -187,16 +187,14 @@ export default function Home(props) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
           <div style={{ fontWeight: 800, fontSize: 24, color: colors.mango }}>Toys of the World</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', gap: 4, background: 'rgba(255,255,255,0.12)', borderRadius: 999, padding: 3 }}>
-              {['en', 'es', 'fr', 'zh', 'ja'].map(function (l) {
-                return (
-                  <button key={l} onClick={function () { setLang(l); }}
-                    style={{ border: 'none', background: lang === l ? colors.mango : 'transparent', color: lang === l ? colors.ink : '#fff', fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 999 }}>
-                    {l.toUpperCase()}
-                  </button>
-                );
-              })}
-            </div>
+            <select value={lang} onChange={function (e) { setLang(e.target.value); }}
+              style={{ border: 'none', background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 12, fontWeight: 700, padding: '6px 10px', borderRadius: 999 }}>
+              <option value="en" style={{ color: '#000' }}>English</option>
+              <option value="es" style={{ color: '#000' }}>Español</option>
+              <option value="fr" style={{ color: '#000' }}>Français</option>
+              <option value="zh" style={{ color: '#000' }}>中文</option>
+              <option value="ja" style={{ color: '#000' }}>日本語</option>
+            </select>
             <SignedOut>
               <SignInButton mode="modal">
                 <button style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', border: 'none', padding: '7px 14px', borderRadius: 999, fontSize: 12, fontWeight: 700 }}>
