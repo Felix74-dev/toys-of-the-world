@@ -26,9 +26,12 @@ const colors = {
 };
 
 const labels = {
-  en: { back: '\u2190 Back to all toys', playedIn: 'Played in:', materials: "What it's made of", play: 'How to play', history: 'A little history', collector: "Collector's Corner", see: 'See the collection \u2192', membersOnly: 'Sign in as a member to see this collector and their link.', signInToView: 'Sign in to view' },
-  es: { back: '\u2190 Volver a todos los juguetes', playedIn: 'Se juega en:', materials: 'De qu\u00e9 est\u00e1 hecho', play: 'C\u00f3mo se juega', history: 'Un poco de historia', collector: 'Rinc\u00f3n del coleccionista', see: 'Ver la colecci\u00f3n \u2192', membersOnly: 'Inicia sesi\u00f3n como miembro para ver a este coleccionista y su enlace.', signInToView: 'Iniciar sesi\u00f3n para ver' },
-  fr: { back: '\u2190 Retour \u00e0 tous les jouets', playedIn: 'Jou\u00e9 en :', materials: 'De quoi il est fait', play: 'Comment jouer', history: 'Un peu d\'histoire', collector: 'Coin des collectionneurs', see: 'Voir la collection \u2192', membersOnly: 'Connectez-vous en tant que membre pour voir ce collectionneur et son lien.', signInToView: 'Se connecter pour voir' },
+  en: { back: '\u2190 Back to all toys', playedIn: 'Played in:', materials: "What it's made of", play: 'How to play', history: 'A little history', collector: "Collector's Corner", see: 'See the collection \u2192', membersOnly: 'Sign in as a member to see this collector and their link.', signInToView: 'Sign in to view',
+    overview: 'Overview', culture: 'Civilisation / Culture', period: 'Date / Period', evidence: 'Evidence Status', significance: 'Cultural Significance', facts: 'Interesting Facts', museumRefs: 'Museum & Archaeological References', imageRefs: 'Image References' },
+  es: { back: '\u2190 Volver a todos los juguetes', playedIn: 'Se juega en:', materials: 'De qu\u00e9 est\u00e1 hecho', play: 'C\u00f3mo se juega', history: 'Un poco de historia', collector: 'Rinc\u00f3n del coleccionista', see: 'Ver la colecci\u00f3n \u2192', membersOnly: 'Inicia sesi\u00f3n como miembro para ver a este coleccionista y su enlace.', signInToView: 'Iniciar sesi\u00f3n para ver',
+    overview: 'Resumen', culture: 'Civilizaci\u00f3n / Cultura', period: 'Fecha / Periodo', evidence: 'Estado de la evidencia', significance: 'Significado cultural', facts: 'Datos curiosos', museumRefs: 'Referencias de museos y arqueolog\u00eda', imageRefs: 'Referencias de imagen' },
+  fr: { back: '\u2190 Retour \u00e0 tous les jouets', playedIn: 'Jou\u00e9 en :', materials: 'De quoi il est fait', play: 'Comment jouer', history: 'Un peu d\'histoire', collector: 'Coin des collectionneurs', see: 'Voir la collection \u2192', membersOnly: 'Connectez-vous en tant que membre pour voir ce collectionneur et son lien.', signInToView: 'Se connecter pour voir',
+    overview: 'Aper\u00e7u', culture: 'Civilisation / Culture', period: 'Date / P\u00e9riode', evidence: '\u00c9tat des preuves', significance: 'Importance culturelle', facts: 'Anecdotes', museumRefs: 'R\u00e9f\u00e9rences de mus\u00e9es et arch\u00e9ologiques', imageRefs: 'R\u00e9f\u00e9rences d\'image' },
 };
 
 function getTranslated(toy, lang, field) {
@@ -36,6 +39,18 @@ function getTranslated(toy, lang, field) {
   const t = toy.translations && toy.translations.find(function (tr) { return tr.locale === lang; });
   if (t && t[field]) return t[field];
   return toy[field];
+}
+
+function Field(props) {
+  if (!props.value) return null;
+  return (
+    <div>
+      <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 6, marginTop: 20 }}>
+        {props.label}
+      </div>
+      <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' }}>{props.value}</p>
+    </div>
+  );
 }
 
 export default function ToyDetail(props) {
@@ -75,29 +90,49 @@ export default function ToyDetail(props) {
         <img src={photo} alt={name} style={{ width: '100%', maxHeight: 280, objectFit: 'cover', borderRadius: 16, marginBottom: 16 }} />
 
         <h1 style={{ color: colors.ink, fontSize: 26, margin: '0 0 6px' }}>{name}</h1>
-        <div style={{ fontSize: 14, color: colors.coral, fontWeight: 600, marginBottom: 20 }}>{l.playedIn} {country}</div>
+        <div style={{ fontSize: 14, color: colors.coral, fontWeight: 600, marginBottom: 6 }}>{l.playedIn} {country}</div>
+        {(toy.civilisationCulture || toy.datePeriod) && (
+          <div style={{ fontSize: 12, color: '#8a8267', marginBottom: 20 }}>
+            {toy.civilisationCulture}{toy.civilisationCulture && toy.datePeriod ? ' \u00b7 ' : ''}{toy.datePeriod}
+          </div>
+        )}
+        {!(toy.civilisationCulture || toy.datePeriod) && <div style={{ marginBottom: 20 }} />}
 
-        <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 6 }}>
+        {toy.description && <Field label={l.overview} value={toy.description} />}
+
+        <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 6, marginTop: 20 }}>
           {l.materials}
         </div>
-        <p style={{ fontSize: 15, lineHeight: 1.6, marginBottom: 20 }}>{materials}</p>
+        <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0 }}>{materials}</p>
 
-        <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 6 }}>
+        <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 6, marginTop: 20 }}>
           {l.play}
         </div>
-        <p style={{ fontSize: 15, lineHeight: 1.6, marginBottom: 20 }}>{playDescription}</p>
+        <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0 }}>{playDescription}</p>
 
         {history && (
           <div>
-            <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 6 }}>
+            <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#8a8267', marginBottom: 6, marginTop: 20 }}>
               {l.history}
             </div>
-            <p style={{ fontSize: 15, lineHeight: 1.6, marginBottom: 20 }}>{history}</p>
+            <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0 }}>{history}</p>
           </div>
         )}
 
+        <Field label={l.significance} value={toy.culturalSignificance} />
+        <Field label={l.facts} value={toy.interestingFacts} />
+
+        {toy.evidenceStatus && (
+          <div style={{ marginTop: 20, display: 'inline-block', background: '#f4f0e4', padding: '5px 12px', borderRadius: 999, fontSize: 11, fontWeight: 700, color: colors.ink }}>
+            {l.evidence}: {toy.evidenceStatus}
+          </div>
+        )}
+
+        <Field label={l.museumRefs} value={toy.museumReferences} />
+        <Field label={l.imageRefs} value={toy.imageReferences} />
+
         {toy.collector && (
-          <div style={{ background: '#fff', border: '1.5px solid #ece4d2', borderRadius: 16, padding: 16, marginTop: 20 }}>
+          <div style={{ background: '#fff', border: '1.5px solid #ece4d2', borderRadius: 16, padding: 16, marginTop: 24 }}>
             <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#2C9D8F', marginBottom: 8 }}>
               {l.collector}
             </div>
