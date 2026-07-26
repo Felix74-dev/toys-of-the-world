@@ -69,6 +69,36 @@ const uiStrings = {
     submitBtn: 'Soumettre pour validation', submitting: 'Envoi...', mySubmissions: 'Mes propositions',
     footerText: 'Des questions ou envie de proposer un jouet ?',
   },
+  zh: {
+    heroTitle: '探索世界各地的玩具及其历史',
+    sub1: '浏览并了解自古以来孩子们使用过的玩具。',
+    sub2: '自己上传吧！如果你知道一个可以加入本应用的玩具，请联系我们。每一个新增的玩具都在帮助我们打造世界上最大的玩具图书馆。',
+    sub3: '这个应用是为所有热爱玩具的人准备的：儿童、青少年、历史学家、家长、学校和社区组织。',
+    note: '许多玩具是由不同文化在历史长河中独立创造出来的。我们庆祝每一种有记载的传统，而不是将其归为单一起源。',
+    allRegions: '所有地区', samerica: '南美洲', africa: '非洲', asia: '亚洲', europe: '欧洲', oceania: '大洋洲', namerica: '北美洲',
+    playedIn: '流行于：', shareToy: '分享一个玩具', noToys: '该地区暂时还没有已发布的玩具 —— 请稍后再来看看。',
+    formTitle: '分享一个玩具', submittingAs: '以此身份提交：',
+    namePlaceholder: '玩具名称', countryPlaceholder: '这个玩具在哪里玩？（国家/地区）', regionLabel: '大洲/地区类别',
+    materialsPlaceholder: '材料', descPlaceholder: '告诉我们你所知道的这个玩具', sourcePlaceholder: '信息来源（例如故事书、家人、博物馆）',
+    photoLabel: '添加照片', reviewNote: '提交的内容会先由我们的团队审核后才会发布，可能需要一些时间才会显示。',
+    submitBtn: '提交审核', submitting: '提交中...', mySubmissions: '我的提交',
+    footerText: '有问题或想为我们添加一个玩具吗？',
+  },
+  ja: {
+    heroTitle: '世界のおもちゃとその歴史を発見しよう',
+    sub1: '太古の昔から子どもたちが使ってきたおもちゃを見て、学んでみましょう。',
+    sub2: 'ぜひご自身で投稿してください！このアプリに載せられそうなおもちゃをご存じなら、ぜひご連絡ください。追加された一つ一つが、世界最大のおもちゃライブラリーづくりに役立ちます。',
+    sub3: 'このアプリは、おもちゃを愛するすべての人のためのものです：子ども、若者、歴史研究者、保護者、学校、地域団体。',
+    note: '多くのおもちゃは、歴史を通じて異なる文化の中で独立して生み出されました。私たちは単一の起源を割り当てるのではなく、記録されたすべての伝統を称えます。',
+    allRegions: 'すべての地域', samerica: '南アメリカ', africa: 'アフリカ', asia: 'アジア', europe: 'ヨーロッパ', oceania: 'オセアニア', namerica: '北アメリカ',
+    playedIn: '遊ばれている場所：', shareToy: 'おもちゃを共有する', noToys: 'この地域にはまだ公開されているおもちゃがありません —— またのぞいてみてください。',
+    formTitle: 'おもちゃを共有する', submittingAs: '投稿者：',
+    namePlaceholder: 'おもちゃの名前', countryPlaceholder: 'このおもちゃはどこで遊ばれていますか？（国/地域）', regionLabel: '大陸/地域カテゴリー',
+    materialsPlaceholder: '材料', descPlaceholder: 'このおもちゃについて知っていることを教えてください', sourcePlaceholder: '情報源（例：絵本、家族、博物館）',
+    photoLabel: '写真を追加', reviewNote: '投稿内容は公開前にチームが確認しますので、表示されるまで少し時間がかかることがあります。',
+    submitBtn: '承認のために送信', submitting: '送信中...', mySubmissions: 'マイ投稿',
+    footerText: 'ご質問やおもちゃを追加したい場合は？',
+  },
 };
 
 function getTranslated(toy, lang, field) {
@@ -154,11 +184,11 @@ export default function Home(props) {
     </Head>
     <main style={{ fontFamily: 'sans-serif', background: colors.paper, minHeight: '100vh', color: colors.charcoal }}>
       <header style={{ background: colors.ink, color: '#fff', padding: '20px 18px 28px', borderRadius: '0 0 24px 24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
           <div style={{ fontWeight: 800, fontSize: 24, color: colors.mango }}>Toys of the World</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', gap: 4, background: 'rgba(255,255,255,0.12)', borderRadius: 999, padding: 3 }}>
-              {['en', 'es', 'fr'].map(function (l) {
+              {['en', 'es', 'fr', 'zh', 'ja'].map(function (l) {
                 return (
                   <button key={l} onClick={function () { setLang(l); }}
                     style={{ border: 'none', background: lang === l ? colors.mango : 'transparent', color: lang === l ? colors.ink : '#fff', fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 999 }}>
@@ -283,30 +313,4 @@ export default function Home(props) {
                   onChange={function (e) { setFormData(Object.assign({}, formData, { materials: e.target.value })); }}
                   style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
                 <textarea placeholder={s.descPlaceholder} value={formData.playDescription}
-                  onChange={function (e) { setFormData(Object.assign({}, formData, { playDescription: e.target.value })); }}
-                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd', minHeight: 70 }} />
-                <input placeholder={s.sourcePlaceholder} value={formData.source}
-                  onChange={function (e) { setFormData(Object.assign({}, formData, { source: e.target.value })); }}
-                  style={{ width: '100%', padding: 10, marginBottom: 10, borderRadius: 10, border: '1px solid #ddd' }} />
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: colors.ink, marginBottom: 6 }}>{s.photoLabel}</label>
-                <input type="file" accept="image/*"
-                  onChange={function (e) { setPhotoFile(e.target.files[0]); }}
-                  style={{ width: '100%', marginBottom: 14, fontSize: 12 }} />
-                <p style={{ fontSize: 11.5, color: '#8a8267', margin: '0 0 12px' }}>{s.reviewNote}</p>
-                <button onClick={handleSubmit} disabled={uploading} style={{ width: '100%', background: '#E8604B', color: '#fff', border: 'none', padding: 13, borderRadius: 12, fontWeight: 700 }}>
-                  {uploading ? s.submitting : s.submitBtn}
-                </button>
-                {submitError && <p style={{ fontSize: 12, color: '#E8604B', marginTop: 10 }}>{submitError}</p>}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      <footer style={{ textAlign: 'center', padding: '20px 16px 90px', fontSize: 12, color: '#8a8267' }}>
-        {s.footerText} <a href="mailto:hello@toysoftheworld.app" style={{ color: colors.ink, fontWeight: 700 }}>hello@toysoftheworld.app</a>
-      </footer>
-    </main>
-    </>
-  );
-}
+                  onChange={function (e) { s
