@@ -38,6 +38,7 @@ const uiStrings = {
     photoLabel: 'Add a photo', reviewNote: "Submissions are reviewed by our team before they're published, so it may take a little while to appear.",
     submitBtn: 'Submit for approval', submitting: 'Submitting...', mySubmissions: 'My submissions',
     footerText: 'Questions or want to add a toy for us?',
+    searchPlaceholder: 'Search toys by name or country...',
   },
   es: {
     heroTitle: 'Descubre los juguetes del mundo y su historia',
@@ -53,6 +54,7 @@ const uiStrings = {
     photoLabel: 'Agregar una foto', reviewNote: 'Los envíos son revisados por nuestro equipo antes de publicarse, así que puede tardar un poco en aparecer.',
     submitBtn: 'Enviar para revisión', submitting: 'Enviando...', mySubmissions: 'Mis envíos',
     footerText: '¿Preguntas o quieres agregar un juguete?',
+    searchPlaceholder: 'Busca juguetes por nombre o país...',
   },
   fr: {
     heroTitle: 'Découvrez les jouets du monde et leur histoire',
@@ -68,6 +70,7 @@ const uiStrings = {
     photoLabel: 'Ajouter une photo', reviewNote: 'Les propositions sont examinées par notre équipe avant publication, cela peut donc prendre un peu de temps.',
     submitBtn: 'Soumettre pour validation', submitting: 'Envoi...', mySubmissions: 'Mes propositions',
     footerText: 'Des questions ou envie de proposer un jouet ?',
+    searchPlaceholder: 'Rechercher un jouet par nom ou pays...',
   },
   zh: {
     heroTitle: '探索世界各地的玩具及其历史',
@@ -83,6 +86,7 @@ const uiStrings = {
     photoLabel: '添加照片', reviewNote: '提交的内容会先由我们的团队审核后才会发布，可能需要一些时间才会显示。',
     submitBtn: '提交审核', submitting: '提交中...', mySubmissions: '我的提交',
     footerText: '有问题或想为我们添加一个玩具吗？',
+    searchPlaceholder: '按名称或国家搜索玩具...',
   },
   ja: {
     heroTitle: '世界のおもちゃとその歴史を発見しよう',
@@ -98,6 +102,7 @@ const uiStrings = {
     photoLabel: '写真を追加', reviewNote: '投稿内容は公開前にチームが確認しますので、表示されるまで少し時間がかかることがあります。',
     submitBtn: '承認のために送信', submitting: '送信中...', mySubmissions: 'マイ投稿',
     footerText: 'ご質問やおもちゃを追加したい場合は？',
+    searchPlaceholder: 'おもちゃを名前や国で検索...',
   },
 };
 
@@ -114,6 +119,7 @@ export default function Home(props) {
   const [lang, setLang] = useState('en');
   const s = uiStrings[lang];
   const [region, setRegion] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [toys, setToys] = useState(initialToys);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ name: '', country: '', region: 'samerica', materials: '', playDescription: '', source: '' });
@@ -176,6 +182,15 @@ export default function Home(props) {
       });
   }
 
+  const filteredToys = toys.filter(function (toy) {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    const name = (getTranslated(toy, lang, 'name') || '').toLowerCase();
+    const country = (getTranslated(toy, lang, 'country') || '').toLowerCase();
+    const materials = (getTranslated(toy, lang, 'materials') || '').toLowerCase();
+    return name.indexOf(q) !== -1 || country.indexOf(q) !== -1 || materials.indexOf(q) !== -1;
+  });
+
   return (
     <>
     <Head>
@@ -220,7 +235,17 @@ export default function Home(props) {
         <p style={{ fontSize: 11.5, lineHeight: 1.5, margin: 0, color: 'rgba(255,255,255,0.75)', fontStyle: 'italic' }}>{s.note}</p>
       </header>
 
-      <div style={{ display: 'flex', gap: 8, padding: '18px 16px 6px', overflowX: 'auto' }}>
+      <div style={{ padding: '4px 16px 6px' }}>
+        <input
+          type="text"
+          placeholder={s.searchPlaceholder}
+          value={searchQuery}
+          onChange={function (e) { setSearchQuery(e.target.value); }}
+          style={{ width: '100%', padding: '10px 14px', borderRadius: 999, border: '1px solid #ddd', fontSize: 14, background: '#fff' }}
+        />
+      </div>
+
+      <div style={{ display: 'flex', gap: 8, padding: '4px 16px 6px', overflowX: 'auto' }}>
         {['all', 'samerica', 'africa', 'asia', 'europe', 'oceania', 'namerica'].map(function (r) {
           const active = region === r;
           const labelKey = r === 'all' ? 'allRegions' : r;
@@ -241,7 +266,7 @@ export default function Home(props) {
       </div>
 
       <div style={{ padding: '14px 16px 100px', display: 'grid', gap: 16 }}>
-        {toys.map(function (toy) {
+        {filteredToys.map(function (toy) {
           const photo = toy.media && toy.media[0] ? toy.media[0].url : 'https://loremflickr.com/200/200/toy,wood';
           const name = getTranslated(toy, lang, 'name');
           const country = getTranslated(toy, lang, 'country');
@@ -263,7 +288,7 @@ export default function Home(props) {
             </a>
           );
         })}
-        {toys.length === 0 && <p>{s.noToys}</p>}
+        {filteredToys.length === 0 && <p>{s.noToys}</p>}
       </div>
 
       <button
