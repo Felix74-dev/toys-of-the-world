@@ -39,6 +39,9 @@ const uiStrings = {
     submitBtn: 'Submit for approval', submitting: 'Submitting...', mySubmissions: 'My submissions',
     footerText: 'Questions or want to add a toy for us?',
     searchPlaceholder: 'Search toys by name or country...',
+    supportTitle: 'Support the Library',
+    supportParagraph: "Toys of the World is being built to stay free — for kids, parents, teachers, and toy lovers everywhere. We'd like to build and grow the biggest cultural archive of its kind, and over time, turn it into a real educational tool for classrooms. Running it does have some costs — hosting, translations, research. If this project means something to you, a small contribution through Buy Me a Coffee helps keep it going and growing.",
+    supportButton: '☕ Buy us a coffee',
   },
   es: {
     heroTitle: 'Descubre los juguetes del mundo y su historia',
@@ -55,6 +58,9 @@ const uiStrings = {
     submitBtn: 'Enviar para revisión', submitting: 'Enviando...', mySubmissions: 'Mis envíos',
     footerText: '¿Preguntas o quieres agregar un juguete?',
     searchPlaceholder: 'Busca juguetes por nombre o país...',
+    supportTitle: 'Apoya la Biblioteca',
+    supportParagraph: 'Toys of the World se está construyendo para ser siempre gratis — para niños, padres, maestros y amantes de los juguetes en todo el mundo. Queremos construir y hacer crecer el archivo cultural más grande de su tipo y, con el tiempo, convertirlo en una herramienta educativa real para las aulas. Mantenerlo en funcionamiento tiene algunos costos — alojamiento, traducciones, investigación. Si este proyecto significa algo para ti, una pequeña contribución a través de Buy Me a Coffee ayuda a que siga creciendo.',
+    supportButton: '☕ Invítanos un café',
   },
   fr: {
     heroTitle: 'Découvrez les jouets du monde et leur histoire',
@@ -71,6 +77,9 @@ const uiStrings = {
     submitBtn: 'Soumettre pour validation', submitting: 'Envoi...', mySubmissions: 'Mes propositions',
     footerText: 'Des questions ou envie de proposer un jouet ?',
     searchPlaceholder: 'Rechercher un jouet par nom ou pays...',
+    supportTitle: 'Soutenez la biblioth\u00e8que',
+    supportParagraph: "Toys of the World est con\u00e7u pour rester gratuit — pour les enfants, les parents, les enseignants et tous les amoureux des jouets. Nous aimerions construire et faire grandir la plus grande archive culturelle de ce genre et, avec le temps, en faire un v\u00e9ritable outil p\u00e9dagogique pour les salles de classe. Le faire fonctionner a un co\u00fbt — h\u00e9bergement, traductions, recherche. Si ce projet compte pour vous, une petite contribution via Buy Me a Coffee nous aide \u00e0 continuer et \u00e0 grandir.",
+    supportButton: '☕ Offrez-nous un caf\u00e9',
   },
   zh: {
     heroTitle: '探索世界各地的玩具及其历史',
@@ -87,6 +96,9 @@ const uiStrings = {
     submitBtn: '提交审核', submitting: '提交中...', mySubmissions: '我的提交',
     footerText: '有问题或想为我们添加一个玩具吗？',
     searchPlaceholder: '按名称或国家搜索玩具...',
+    supportTitle: '支持图书馆',
+    supportParagraph: 'Toys of the World 致力于永远保持免费——面向世界各地的儿童、家长、教师和玩具爱好者。我们希望建立并发展这一类别中最大的文化档案库，并随着时间的推移，将其打造成课堂真正的教育工具。维持这个项目的运行确实需要一些成本——托管、翻译、研究。如果这个项目对你有意义，通过 Buy Me a Coffee 提供一点小小的支持，将帮助它持续运作和成长。',
+    supportButton: '☕ 请我们喝杯咖啡',
   },
   ja: {
     heroTitle: '世界のおもちゃとその歴史を発見しよう',
@@ -103,6 +115,9 @@ const uiStrings = {
     submitBtn: '承認のために送信', submitting: '送信中...', mySubmissions: 'マイ投稿',
     footerText: 'ご質問やおもちゃを追加したい場合は？',
     searchPlaceholder: 'おもちゃを名前や国で検索...',
+    supportTitle: '\u30e9\u30a4\u30d6\u30e9\u30ea\u30fc\u3092\u652f\u63f4\u3059\u308b',
+    supportParagraph: 'Toys of the World は、世界中の子どもたち、保護者、教師、そしておもちゃを愛するすべての人のために、いつまでも無料であり続けることを目指して作られています。私たちはこの種の文化的アーカイブとして最大級のものを築き上げ、やがては教室で使える本物の教育ツールへと育てていきたいと考えています。運営には、ホスティングや翻訳、調査などの費用がかかります。このプロジェクトに意義を感じていただけるなら、Buy Me a Coffee を通じた小さなご支援が、運営の継続と成長の助けになります。',
+    supportButton: '☕ コーヒーをおごる',
   },
 };
 
@@ -198,7 +213,33 @@ export default function Home(props) {
       <meta name="description" content="Discover toys around the world and their history." />
     </Head>
     <main style={{ fontFamily: 'sans-serif', background: colors.paper, minHeight: '100vh', color: colors.charcoal }}>
-      <header style={{ background: colors.ink, color: '#fff', padding: '20px 18px 28px', borderRadius: '0 0 24px 24px' }}>
+      <header style={{ background: colors.ink, color: '#fff', padding: '20px 18px 28px', borderRadius: '0 0 24px 24px', position: 'relative', overflow: 'hidden' }}>
+        <svg viewBox="0 0 900 260" preserveAspectRatio="xMidYMid slice" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0.14 }} xmlns="http://www.w3.org/2000/svg">
+          <path d="M90 60 L120 100 L90 160 L60 100 Z" fill="#fff"/>
+          <rect x="86" y="45" width="8" height="20" rx="4" fill="#fff"/>
+
+          <path d="M270 55 L310 110 L270 165 L230 110 Z" fill="none" stroke="#fff" strokeWidth="5"/>
+          <line x1="270" y1="55" x2="270" y2="165" stroke="#fff" strokeWidth="3"/>
+          <line x1="230" y1="110" x2="310" y2="110" stroke="#fff" strokeWidth="3"/>
+
+          <circle cx="470" cy="110" r="55" fill="none" stroke="#fff" strokeWidth="5"/>
+          <path d="M440 80 Q470 110 440 140" stroke="#fff" strokeWidth="4" fill="none"/>
+          <path d="M500 80 Q470 110 500 140" stroke="#fff" strokeWidth="4" fill="none"/>
+          <line x1="415" y1="110" x2="525" y2="110" stroke="#fff" strokeWidth="3"/>
+
+          <circle cx="650" cy="125" r="46" fill="#fff"/>
+          <circle cx="618" cy="90" r="18" fill="#fff"/>
+          <circle cx="682" cy="90" r="18" fill="#fff"/>
+
+          <rect x="770" y="90" width="70" height="55" rx="6" fill="none" stroke="#fff" strokeWidth="5"/>
+          <ellipse cx="805" cy="90" rx="35" ry="9" fill="none" stroke="#fff" strokeWidth="5"/>
+
+          <path d="M170 190 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4 Z" fill="#fff"/>
+          <path d="M370 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 Z" fill="#fff"/>
+          <path d="M560 200 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 Z" fill="#fff"/>
+          <path d="M740 40 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4 Z" fill="#fff"/>
+        </svg>
+        <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
           <div style={{ fontWeight: 800, fontSize: 24, color: colors.mango }}>Toys of the World</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
@@ -233,6 +274,7 @@ export default function Home(props) {
         <p style={{ fontSize: 14, lineHeight: 1.55, margin: '0 0 10px', fontWeight: 700, color: '#fff' }}>{s.sub2}</p>
         <p style={{ fontSize: 14, lineHeight: 1.55, margin: '0 0 14px', fontWeight: 700, color: '#fff' }}>{s.sub3}</p>
         <p style={{ fontSize: 11.5, lineHeight: 1.5, margin: 0, color: 'rgba(255,255,255,0.75)', fontStyle: 'italic' }}>{s.note}</p>
+        </div>
       </header>
 
       <div style={{ padding: '4px 16px 6px' }}>
@@ -358,16 +400,16 @@ export default function Home(props) {
 
       <div style={{ background: '#fff', margin: '0 16px 20px', borderRadius: 16, padding: 20, border: '1.5px solid #ece4d2' }}>
         <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#2C9D8F', marginBottom: 8 }}>
-          Support the Library
+          {s.supportTitle}
         </div>
         <p style={{ fontSize: 13.5, lineHeight: 1.6, color: colors.charcoal, margin: '0 0 14px' }}>
-          Toys of the World is being built to stay free — for kids, parents, teachers, and toy lovers everywhere. We'd like to build and grow the biggest cultural archive of its kind, and over time, turn it into a real educational tool for classrooms. Running it does have some costs — hosting, translations, research. If this project means something to you, a small contribution through Buy Me a Coffee helps keep it going and growing.
+          {s.supportParagraph}
         </p>
         <a href="https://buymeacoffee.com/toysoftheworld" target="_blank" rel="noopener noreferrer" style={{
           display: 'block', textAlign: 'center', background: '#FFDD00', color: '#2A2419',
           padding: 12, borderRadius: 12, fontWeight: 700, fontSize: 14, textDecoration: 'none',
         }}>
-          ☕ Buy us a coffee
+          {s.supportButton}
         </a>
       </div>
 
