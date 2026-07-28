@@ -205,10 +205,10 @@ export default function Home(props) {
             <select value={lang} onChange={function (e) { setLang(e.target.value); }}
               style={{ border: 'none', background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 12, fontWeight: 700, padding: '6px 10px', borderRadius: 999 }}>
               <option value="en" style={{ color: '#000' }}>English</option>
-              <option value="es" style={{ color: '#000' }}>Español</option>
-              <option value="fr" style={{ color: '#000' }}>Français</option>
-              <option value="zh" style={{ color: '#000' }}>中文</option>
-              <option value="ja" style={{ color: '#000' }}>日本語</option>
+              <option value="es" style={{ color: '#000' }}>Espa\u00f1ol</option>
+              <option value="fr" style={{ color: '#000' }}>Fran\u00e7ais</option>
+              <option value="zh" style={{ color: '#000' }}>\u4e2d\u6587</option>
+              <option value="ja" style={{ color: '#000' }}>\u65e5\u672c\u8a9e</option>
             </select>
             <SignedOut>
               <SignInButton mode="modal">
@@ -357,9 +357,10 @@ export default function Home(props) {
       )}
 
       <footer style={{ textAlign: 'center', padding: '20px 16px 90px', fontSize: 12, color: '#8a8267' }}>
-        {s.footerText} <a href="mailto:hello@toysoftheworld.app" style={{ color: colors.ink, fontWeight: 700 }}>hello@toysoftheworld.app</a>
+        {s.footerText} <a href="mailto:hello@toysoftheworld.org" style={{ color: colors.ink, fontWeight: 700 }}>hello@toysoftheworld.org</a>
       </footer>
     </main>
     </>
   );
 }
+
