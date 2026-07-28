@@ -356,6 +356,21 @@ export default function Home(props) {
         </div>
       )}
 
+      <div style={{ background: '#fff', margin: '0 16px 20px', borderRadius: 16, padding: 20, border: '1.5px solid #ece4d2' }}>
+        <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, color: '#2C9D8F', marginBottom: 8 }}>
+          Support the Library
+        </div>
+        <p style={{ fontSize: 13.5, lineHeight: 1.6, color: colors.charcoal, margin: '0 0 14px' }}>
+          Toys of the World is being built to stay free — for kids, parents, teachers, and toy lovers everywhere. We'd like to build and grow the biggest cultural archive of its kind, and over time, turn it into a real educational tool for classrooms. Running it does have some costs — hosting, translations, research. If this project means something to you, a small contribution through Buy Me a Coffee helps keep it going and growing.
+        </p>
+        <a href="https://buymeacoffee.com/toysoftheworld" target="_blank" rel="noopener noreferrer" style={{
+          display: 'block', textAlign: 'center', background: '#FFDD00', color: '#2A2419',
+          padding: 12, borderRadius: 12, fontWeight: 700, fontSize: 14, textDecoration: 'none',
+        }}>
+          ☕ Buy us a coffee
+        </a>
+      </div>
+
       <footer style={{ textAlign: 'center', padding: '20px 16px 90px', fontSize: 12, color: '#8a8267' }}>
         {s.footerText} <a href="mailto:hello@toysoftheworld.org" style={{ color: colors.ink, fontWeight: 700 }}>hello@toysoftheworld.org</a>
       </footer>
@@ -363,4 +378,3 @@ export default function Home(props) {
     </>
   );
 }
-
